@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Terminal, Cpu, Brain, Code, ChevronRight, Share2, Mail, Github, Linkedin, Layers, Workflow, Menu, X } from 'lucide-react';
+import { Terminal, Cpu, Brain, Code, ChevronRight, Share2, Mail, Github, Linkedin, Layers, Workflow, Menu, X, GraduationCap } from 'lucide-react';
 import Hero from './components/Hero';
 import About from './components/About';
 import SkillChart from './components/SkillChart';
@@ -8,8 +8,9 @@ import ProjectCard from './components/ProjectCard';
 import AIDashboard from './components/AIDashboard';
 import AITrainingStudio from './components/AITrainingStudio';
 import MLOpsPipeline from './components/MLOpsPipeline';
+import Education from './components/Education';
 import RevealOnScroll from './components/RevealOnScroll';
-import { PROJECTS, EXPERIENCE, TECH_STACK } from './constants';
+import { PROJECTS, EXPERIENCE, TECH_STACK, SOCIAL_LINKS } from './constants';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('home');
@@ -47,7 +48,7 @@ const App: React.FC = () => {
 
   if (!mounted) return <div className="bg-black h-screen w-full" />;
 
-  const navItems = ['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'AI_STUDIO', 'MLOPS', 'AI_LAB'];
+  const navItems = ['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'EDUCATION', 'AI_STUDIO', 'MLOPS', 'AI_LAB'];
 
   return (
     <div className="min-h-screen bg-black text-neutral-200 font-mono relative">
@@ -64,13 +65,13 @@ const App: React.FC = () => {
             </div>
             
             {/* Desktop Menu */}
-            <div className="hidden md:block">
+            <div className="hidden lg:block">
               <div className="ml-10 flex items-baseline space-x-6 lg:space-x-8">
                 {navItems.map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollTo(item.toLowerCase())}
-                    className={`hover:text-white px-2 py-2 rounded-md text-xs lg:text-sm font-medium transition-all duration-300 hover:bg-white/5 ${
+                    className={`hover:text-white px-2 py-2 rounded-md text-xs font-medium transition-all duration-300 hover:bg-white/5 ${
                       activeSection === item.toLowerCase() ? 'text-white border-b-2 border-white' : 'text-neutral-500'
                     }`}
                   >
@@ -81,7 +82,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Mobile Menu Toggle */}
-            <div className="md:hidden">
+            <div className="lg:hidden">
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="text-neutral-400 hover:text-white focus:outline-none p-2"
@@ -94,7 +95,7 @@ const App: React.FC = () => {
 
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-black border-b border-neutral-800 absolute w-full left-0 top-14 shadow-2xl animate-fade-in-up">
+          <div className="lg:hidden bg-black border-b border-neutral-800 absolute w-full left-0 top-14 shadow-2xl animate-fade-in-up">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
               {navItems.map((item) => (
                 <button
@@ -116,7 +117,7 @@ const App: React.FC = () => {
 
       <main className="relative z-10 pt-16">
         {/* Section: Home / Hero */}
-        <section id="home" className="min-h-[85vh] flex flex-col justify-center items-center px-4 border-b border-neutral-900">
+        <section id="home" className="min-h-[85vh] flex flex-col justify-center items-center px-4 border-b border-neutral-900 py-12">
           <Hero onNavigate={scrollTo} />
         </section>
 
@@ -126,7 +127,7 @@ const App: React.FC = () => {
         </section>
 
         {/* Section: Projects */}
-        <section id="projects" className="py-16 border-b border-neutral-900">
+        <section id="projects" className="py-12 border-b border-neutral-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <RevealOnScroll>
               <div className="flex items-center gap-4 mb-8">
@@ -145,7 +146,7 @@ const App: React.FC = () => {
         </section>
 
         {/* Section: Skills & Analytics */}
-        <section id="skills" className="py-16 border-b border-neutral-900 bg-neutral-950/30">
+        <section id="skills" className="py-12 border-b border-neutral-900 bg-neutral-950/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               
@@ -201,7 +202,7 @@ const App: React.FC = () => {
         </section>
 
          {/* Section: Experience */}
-         <section id="experience" className="py-16 border-b border-neutral-900">
+         <section id="experience" className="py-12 border-b border-neutral-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
              <RevealOnScroll>
                <div className="flex items-center gap-4 mb-8">
@@ -242,16 +243,23 @@ const App: React.FC = () => {
             </div>
           </div>
         </section>
+
+        {/* Section: Education */}
+        <section id="education" className="py-12 border-b border-neutral-900 bg-neutral-950/20">
+          <RevealOnScroll>
+            <Education />
+          </RevealOnScroll>
+        </section>
         
         {/* Section: AI Training Studio */}
-        <section id="ai_studio" className="py-16 border-b border-neutral-900 bg-neutral-950/30">
+        <section id="ai_studio" className="py-12 border-b border-neutral-900 bg-neutral-950/30">
            <RevealOnScroll>
              <AITrainingStudio />
            </RevealOnScroll>
         </section>
 
         {/* Section: MLOps Pipeline */}
-        <section id="mlops" className="py-16 border-b border-neutral-900">
+        <section id="mlops" className="py-12 border-b border-neutral-900">
            <RevealOnScroll>
              <MLOpsPipeline />
            </RevealOnScroll>
@@ -277,13 +285,13 @@ const App: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
             <div className="flex flex-col gap-1">
               <span className="font-bold text-white tracking-wider hover:text-green-500 transition-colors cursor-default text-sm">N_DHANVINA</span>
-              <span className="text-[10px] text-neutral-600">LEAD AI ENGINEER // ndhanvina07@gmail.com</span>
+              <span className="text-[10px] text-neutral-600">LEAD AI ENGINEER // {SOCIAL_LINKS.email}</span>
             </div>
             
             <div className="flex gap-6">
-              <a href="https://github.com/dhanvina" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transform hover:scale-110 transition-all"><Github className="w-5 h-5" /></a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transform hover:scale-110 transition-all"><Linkedin className="w-5 h-5" /></a>
-              <a href="mailto:ndhanvina07@gmail.com" className="text-neutral-500 hover:text-white transform hover:scale-110 transition-all"><Mail className="w-5 h-5" /></a>
+              <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transform hover:scale-110 transition-all"><Github className="w-5 h-5" /></a>
+              <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transform hover:scale-110 transition-all"><Linkedin className="w-5 h-5" /></a>
+              <a href={`mailto:${SOCIAL_LINKS.email}`} className="text-neutral-500 hover:text-white transform hover:scale-110 transition-all"><Mail className="w-5 h-5" /></a>
             </div>
           </div>
         </footer>

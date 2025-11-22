@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Terminal, Command, Cpu, Hash, Eye } from 'lucide-react';
+import { ChevronRight, Terminal, Command, Cpu, Hash, Eye, Linkedin } from 'lucide-react';
+import { SOCIAL_LINKS } from '../constants';
 
 interface HeroProps {
   onNavigate: (section: string) => void;
@@ -263,6 +264,16 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             <Command className="w-4 h-4 text-neutral-500 group-hover:text-white transition-colors" />
             INITIALIZE_CHAT
           </button>
+
+           <a 
+            href={SOCIAL_LINKS.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group border border-neutral-700 text-white px-4 py-3 font-bold text-xs sm:text-sm tracking-wide hover:border-blue-400 hover:text-blue-400 hover:bg-blue-500/5 transition-all flex items-center justify-center gap-2 backdrop-blur-md w-full sm:w-auto"
+          >
+            <Linkedin className="w-4 h-4" />
+            CONNECT
+          </a>
         </div>
 
       </div>

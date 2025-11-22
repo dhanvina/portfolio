@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { User, Terminal, Cpu } from 'lucide-react';
-import { ABOUT } from '../constants';
+import { User, Terminal, Cpu, ExternalLink } from 'lucide-react';
+import { ABOUT, SOCIAL_LINKS } from '../constants';
 import RevealOnScroll from './RevealOnScroll';
 
 const About: React.FC = () => {
@@ -76,9 +76,22 @@ const About: React.FC = () => {
             ))}
           </div>
 
+           {/* Social Connect */}
+           <RevealOnScroll delay={800}>
+            <a 
+              href={SOCIAL_LINKS.linkedin} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs font-bold text-white bg-blue-600/10 border border-blue-600/30 px-4 py-2 hover:bg-blue-600/20 hover:border-blue-500 transition-all"
+            >
+              <ExternalLink className="w-3 h-3" />
+              CONNECT_ON_LINKEDIN
+            </a>
+          </RevealOnScroll>
+
           {/* Footer Quote */}
           <RevealOnScroll delay={900}>
-            <div className="flex items-center gap-3 p-3 bg-neutral-900/50 border-t border-neutral-800 rounded-sm hover:bg-neutral-900 transition-colors duration-300">
+            <div className="flex items-center gap-3 p-3 bg-neutral-900/50 border-t border-neutral-800 rounded-sm hover:bg-neutral-900 transition-colors duration-300 mt-4">
               <Cpu className="w-4 h-4 text-neutral-500" />
               <div className="italic text-neutral-400 text-xs font-mono">
                 "{ABOUT.funFact}"

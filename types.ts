@@ -17,6 +17,15 @@ export interface Job {
   stack: string[];
 }
 
+export interface EducationItem {
+  institution: string;
+  degree: string;
+  period: string;
+  grade?: string;
+  desc?: string;
+  skills?: string[];
+}
+
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
