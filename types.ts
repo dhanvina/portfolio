@@ -1,3 +1,4 @@
+
 export interface Project {
   id: string;
   title: string;
@@ -12,7 +13,7 @@ export interface Job {
   role: string;
   company: string;
   period: string;
-  description: string;
+  description: string[]; // Changed to array of strings for bullet points
   stack: string[];
 }
 
@@ -26,4 +27,9 @@ export interface SkillData {
   subject: string;
   A: number;
   fullMark: number;
+}
+
+export interface TechCategory {
+  category: string;
+  skills: string[];
 }

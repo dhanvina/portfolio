@@ -108,6 +108,29 @@ const NetworkVisualizer: React.FC = () => {
   );
 };
 
+// --- Sub-Component: Header Status Item with Tooltip ---
+interface HeaderStatusProps {
+  icon: React.ReactNode;
+  label: string;
+  tooltip: string;
+  textColor?: string;
+}
+
+const HeaderStatus: React.FC<HeaderStatusProps> = ({ icon, label, tooltip, textColor }) => (
+  <div className="group relative flex items-center gap-1 cursor-help transition-colors hover:text-neutral-300">
+    {icon}
+    <span className={textColor}>{label}</span>
+    {/* Tooltip */}
+    <div className="absolute top-full right-0 mt-2 w-56 p-2 bg-neutral-900/95 backdrop-blur-md border border-neutral-700 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-[60]">
+      <div className="text-[10px] font-bold text-neutral-500 mb-1 border-b border-neutral-800 pb-1 flex justify-between">
+        <span>SYSTEM_METRIC</span>
+        <span className="text-green-500">●</span>
+      </div>
+      <div className="text-xs text-white leading-snug font-sans">{tooltip}</div>
+    </div>
+  </div>
+);
+
 const AIDashboard: React.FC = () => {
   return (
     <div className="w-full max-w-7xl mx-auto border border-neutral-800 bg-neutral-950/80 shadow-2xl relative overflow-hidden">
@@ -117,33 +140,37 @@ const AIDashboard: React.FC = () => {
       </div>
 
       {/* Dashboard Header */}
-      <div className="h-10 border-b border-neutral-800 flex items-center justify-between px-4 bg-neutral-900">
+      <div className="h-10 border-b border-neutral-800 flex items-center justify-between px-4 bg-neutral-900 relative z-20">
         <div className="flex items-center gap-3">
           <div className="flex gap-1.5">
             <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
             <div className="w-3 h-3 rounded-full bg-green-500 border border-green-400 animate-pulse" />
           </div>
-          <span className="text-xs font-mono text-neutral-400 tracking-widest">NEURAL_OPS_CENTER // V4.1.2</span>
+          <span className="text-xs font-mono text-neutral-400 tracking-widest">NEURAL_OPERATIONS_CENTER</span>
         </div>
         <div className="flex items-center gap-4 text-xs font-mono text-neutral-500">
-          <div className="flex items-center gap-1">
-            <Server className="w-3 h-3" />
-            <span>US-EAST-1</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Shield className="w-3 h-3" />
-            <span>SECURE</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Zap className="w-3 h-3 text-yellow-500" />
-            <span>98% PWR</span>
-          </div>
+          <HeaderStatus 
+            icon={<Server className="w-3 h-3" />} 
+            label="US-EAST-1" 
+            tooltip="Primary inference node online. Latency: 12ms." 
+          />
+          <HeaderStatus 
+            icon={<Shield className="w-3 h-3" />} 
+            label="SECURE" 
+            tooltip="End-to-end encryption active. Firewall: ENABLED." 
+          />
+          <HeaderStatus 
+            icon={<Zap className="w-3 h-3 text-yellow-500" />} 
+            label="98% PWR" 
+            textColor="text-yellow-500"
+            tooltip="GPU Utilization: 98%. Power efficiency: OPTIMAL." 
+          />
         </div>
       </div>
 
       {/* Dashboard Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 h-[600px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 h-[450px]">
         
         {/* Left Sidebar: Metrics & Viz (3 cols) */}
         <div className="lg:col-span-3 border-r border-neutral-800 flex flex-col">

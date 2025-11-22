@@ -1,10 +1,12 @@
+
 import React, { useState, useEffect } from 'react';
-import { Terminal, Cpu, Brain, Code, ChevronRight, Share2, Mail, Github, Linkedin } from 'lucide-react';
+import { Terminal, Cpu, Brain, Code, ChevronRight, Share2, Mail, Github, Linkedin, Layers } from 'lucide-react';
 import Hero from './components/Hero';
+import About from './components/About';
 import SkillChart from './components/SkillChart';
 import ProjectCard from './components/ProjectCard';
 import AIDashboard from './components/AIDashboard';
-import { PROJECTS, EXPERIENCE } from './constants';
+import { PROJECTS, EXPERIENCE, TECH_STACK } from './constants';
 
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('home');
@@ -39,7 +41,7 @@ const App: React.FC = () => {
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
-                {['HOME', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'AI_LAB'].map((item) => (
+                {['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'AI_LAB'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollTo(item.toLowerCase())}
@@ -62,6 +64,11 @@ const App: React.FC = () => {
           <Hero onNavigate={scrollTo} />
         </section>
 
+        {/* Section: About - Reduced Padding */}
+        <section id="about" className="py-16 border-b border-neutral-900 bg-neutral-950/20">
+          <About />
+        </section>
+
         {/* Section: Projects */}
         <section id="projects" className="py-24 border-b border-neutral-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,39 +87,49 @@ const App: React.FC = () => {
         {/* Section: Skills & Analytics */}
         <section id="skills" className="py-24 border-b border-neutral-900 bg-neutral-950/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+              
+              {/* Tech Stack Grid */}
               <div>
                  <div className="flex items-center gap-4 mb-8">
-                  <Brain className="w-8 h-8 text-white" />
-                  <h2 className="text-3xl font-bold text-white tracking-tight">NEURAL_CAPABILITIES</h2>
+                  <Layers className="w-8 h-8 text-white" />
+                  <h2 className="text-3xl font-bold text-white tracking-tight">TECH_ARSENAL</h2>
                 </div>
                 <p className="text-neutral-400 mb-8 leading-relaxed">
-                  Specialized in designing scalable machine learning architectures. 
-                  Core competencies include <span className="text-white">Computer Vision</span> (YOLO, CNNs), <span className="text-white">LLM Integration</span> (LangChain, Gemini), and production-grade <span className="text-white">MLOps</span> (Docker, MLflow).
+                  Comprehensive stack specialized for end-to-end AI development, from <span className="text-white">data engineering</span> to <span className="text-white">model deployment</span>.
                 </p>
                 
-                <div className="space-y-6">
-                  {['Deep Learning (PyTorch/TensorFlow)', 'MLOps (Docker, MLflow, DVC)', 'LLMs & Generative AI', 'Backend API (Django/FastAPI)'].map((skill, idx) => (
-                    <div key={idx} className="group">
-                      <div className="flex justify-between mb-2 text-sm">
-                        <span className="text-white group-hover:text-neutral-200 transition-colors">{skill}</span>
-                        <span className="text-neutral-600">{(98 - idx * 3)}%</span>
-                      </div>
-                      <div className="w-full bg-neutral-900 h-1">
-                        <div 
-                          className="bg-white h-1 transition-all duration-1000 ease-out"
-                          style={{ width: `${98 - idx * 3}%` }} 
-                        />
+                <div className="grid grid-cols-1 gap-6">
+                  {TECH_STACK.map((stack, idx) => (
+                    <div key={idx} className="border border-neutral-800 bg-black p-4 hover:border-neutral-600 transition-colors">
+                      <h3 className="text-xs font-bold text-green-500 mb-3 tracking-wider uppercase flex items-center gap-2">
+                        <span className="w-1 h-1 bg-green-500 rounded-full"></span>
+                        {stack.category}
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {stack.skills.map((skill) => (
+                          <span key={skill} className="text-sm text-neutral-300 bg-neutral-900 px-2 py-1 border border-neutral-800">
+                            {skill}
+                          </span>
+                        ))}
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
               
-              <div className="bg-black border border-neutral-800 p-6 relative">
-                <div className="absolute top-0 left-0 bg-white text-black text-xs px-2 py-1 font-bold">FIG_1.1</div>
-                <SkillChart />
+              {/* Radar Chart */}
+              <div className="sticky top-24">
+                 <div className="flex items-center gap-4 mb-8 lg:justify-end">
+                  <Brain className="w-8 h-8 text-white" />
+                  <h2 className="text-3xl font-bold text-white tracking-tight">NEURAL_MATRIX</h2>
+                </div>
+                <div className="bg-black border border-neutral-800 p-6 relative">
+                  <div className="absolute top-0 left-0 bg-white text-black text-xs px-2 py-1 font-bold">FIG_1.1</div>
+                  <SkillChart />
+                </div>
               </div>
+
             </div>
           </div>
         </section>
@@ -133,11 +150,19 @@ const App: React.FC = () => {
                     <h3 className="text-xl font-bold text-white">{job.role}</h3>
                     <span className="text-sm text-neutral-500 font-mono">{job.period}</span>
                   </div>
-                  <h4 className="text-neutral-400 mb-4">{job.company}</h4>
-                  <p className="text-neutral-500 max-w-2xl leading-relaxed mb-4">{job.description}</p>
+                  <h4 className="text-green-500 mb-4 font-mono text-sm">{job.company}</h4>
+                  
+                  <ul className="list-disc list-outside ml-4 space-y-2 mb-6">
+                    {job.description.map((desc, i) => (
+                      <li key={i} className="text-neutral-400 leading-relaxed pl-2 marker:text-neutral-600 hover:text-neutral-200 transition-colors">
+                        {desc}
+                      </li>
+                    ))}
+                  </ul>
+
                   <div className="flex flex-wrap gap-2">
                     {job.stack.map((tech) => (
-                      <span key={tech} className="text-xs border border-neutral-800 px-2 py-1 text-neutral-400">
+                      <span key={tech} className="text-xs border border-neutral-800 px-2 py-1 text-neutral-500">
                         {tech}
                       </span>
                     ))}
@@ -149,9 +174,9 @@ const App: React.FC = () => {
         </section>
 
         {/* Section: AI Lab / Neural Operations Center */}
-        <section id="ai_lab" className="py-24 border-b border-neutral-900 bg-neutral-950/50">
+        <section id="ai_lab" className="py-10 border-b border-neutral-900 bg-neutral-950/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-             <div className="flex items-center gap-4 mb-12">
+             <div className="flex items-center gap-4 mb-6">
               <Code className="w-8 h-8 text-white" />
               <h2 className="text-3xl font-bold text-white tracking-tight">NEURAL_OPERATIONS_CENTER</h2>
             </div>
@@ -170,8 +195,8 @@ const App: React.FC = () => {
             </div>
             
             <div className="flex gap-6">
-              <a href="#" className="text-neutral-500 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
-              <a href="#" className="text-neutral-500 hover:text-white transition-colors"><Linkedin className="w-5 h-5" /></a>
+              <a href="https://github.com/dhanvina" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors"><Github className="w-5 h-5" /></a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors"><Linkedin className="w-5 h-5" /></a>
               <a href="mailto:ndhanvina07@gmail.com" className="text-neutral-500 hover:text-white transition-colors"><Mail className="w-5 h-5" /></a>
             </div>
           </div>
