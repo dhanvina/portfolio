@@ -140,24 +140,24 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <div className="relative w-full h-[85vh] md:h-[95vh] flex flex-col justify-center overflow-hidden bg-black">
+    <div className="relative w-full min-h-[80vh] flex flex-col justify-center overflow-hidden bg-black py-10 md:py-0">
       {/* 1. Complex Neural Background */}
       <NeuralBackground />
 
       {/* 2. Decorative HUD Overlay Elements */}
       <div className="absolute inset-0 pointer-events-none select-none z-10">
         {/* Corner Brackets - Hidden on small screens to save space */}
-        <div className={`hidden sm:block absolute top-10 left-10 w-16 h-16 border-l-2 border-t-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-10 -translate-y-10'}`} />
-        <div className={`hidden sm:block absolute top-10 right-10 w-16 h-16 border-r-2 border-t-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-10 -translate-y-10'}`} />
-        <div className={`hidden sm:block absolute bottom-10 left-10 w-16 h-16 border-l-2 border-b-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-10 translate-y-10'}`} />
-        <div className={`hidden sm:block absolute bottom-10 right-10 w-16 h-16 border-r-2 border-b-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-10 translate-y-10'}`} />
+        <div className={`hidden sm:block absolute top-10 left-10 w-12 h-12 border-l-2 border-t-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-10 -translate-y-10'}`} />
+        <div className={`hidden sm:block absolute top-10 right-10 w-12 h-12 border-r-2 border-t-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-10 -translate-y-10'}`} />
+        <div className={`hidden sm:block absolute bottom-10 left-10 w-12 h-12 border-l-2 border-b-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-10 translate-y-10'}`} />
+        <div className={`hidden sm:block absolute bottom-10 right-10 w-12 h-12 border-r-2 border-b-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-10 translate-y-10'}`} />
 
         {/* Scanning Line */}
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white/5 to-transparent animate-scan-vertical pointer-events-none" />
         
         {/* Random Data Stream (Left Side) */}
         <div className="hidden md:flex flex-col absolute top-1/2 left-8 -translate-y-1/2 space-y-2 text-[10px] font-mono text-neutral-600 opacity-50">
-          {Array.from({length: 8}).map((_, i) => (
+          {Array.from({length: 6}).map((_, i) => (
             <div key={i} className="animate-pulse" style={{ animationDelay: `${i * 0.2}s` }}>
               0x{Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6, '0')}
             </div>
@@ -166,7 +166,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
 
          {/* Random Data Stream (Right Side) */}
          <div className="hidden md:flex flex-col absolute top-1/2 right-8 -translate-y-1/2 space-y-2 text-[10px] font-mono text-neutral-600 opacity-50 text-right">
-          {Array.from({length: 8}).map((_, i) => (
+          {Array.from({length: 6}).map((_, i) => (
             <div key={i} className="animate-pulse" style={{ animationDelay: `${i * 0.3}s` }}>
               RUN_THREAD_{i} [OK]
             </div>
@@ -178,7 +178,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         
         {/* Status Badge */}
-        <div className={`inline-flex items-center gap-3 px-3 py-1 border border-neutral-800 bg-black/50 backdrop-blur-sm mb-8 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+        <div className={`inline-flex items-center gap-3 px-3 py-1 border border-neutral-800 bg-black/50 backdrop-blur-sm mb-6 transition-all duration-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -189,13 +189,13 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
 
         {/* Identity Verification & Name */}
-        <div className="mb-8">
-          <div className={`text-xs sm:text-sm md:text-base font-mono text-neutral-500 mb-2 flex items-center gap-2 transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="mb-6">
+          <div className={`text-xs sm:text-sm font-mono text-neutral-500 mb-2 flex items-center gap-2 transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
             <Hash className="w-3 h-3 sm:w-4 sm:h-4 text-neutral-600" />
             <ScrambleText text="IDENTITY VERIFIED..." delay={500} />
           </div>
           
-          <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-tighter leading-none relative group cursor-default">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-tighter leading-none relative group cursor-default">
              {/* Name Scramble */}
              <ScrambleText text="DHANVINA" className="block" delay={1200} />
              
@@ -210,47 +210,47 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
 
         {/* Bio & Stats */}
-        <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 mt-8 md:mt-12 transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 mt-8 transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           
           {/* Bio Text */}
           <div className="md:col-span-7 relative pl-4 md:pl-6 border-l-2 border-neutral-800">
-             <p className="text-base sm:text-lg md:text-2xl text-neutral-400 font-light leading-relaxed">
+             <p className="text-base sm:text-lg md:text-xl text-neutral-400 font-light leading-relaxed">
                 I build <span className="text-white font-medium">AI-powered systems</span> with robust <span className="text-white font-medium">backend architecture</span>, optimized for <span className="text-white font-medium">production</span>.
              </p>
-             <p className="mt-4 text-sm md:text-base text-neutral-500 font-mono leading-relaxed">
+             <p className="mt-3 text-sm md:text-base text-neutral-500 font-mono leading-relaxed">
                 Welcome! I'm Dhanvina, a passionate AI Engineer and Tech Visionary. My mission is to harness the power of technology to create smarter, scalable, and impactful solutions.
              </p>
-             <p className="mt-4 text-xs sm:text-sm text-green-500 font-mono">
+             <p className="mt-3 text-xs sm:text-sm text-green-500 font-mono">
                Current Focus: Building Next-Gen AI Agents & Advancing GenAI Systems.
              </p>
           </div>
 
           {/* Quick Stats Box */}
           <div className="md:col-span-5 flex flex-col justify-end">
-             <div className="grid grid-cols-2 gap-4">
-                <div className="bg-neutral-900/30 border border-neutral-800 p-3 sm:p-4 backdrop-blur-sm hover:border-white/20 transition-colors group">
-                  <div className="flex items-center gap-2 text-neutral-500 mb-2 text-[10px] sm:text-xs font-mono uppercase">
+             <div className="grid grid-cols-2 gap-3">
+                <div className="bg-neutral-900/30 border border-neutral-800 p-3 backdrop-blur-sm hover:border-white/20 transition-colors group">
+                  <div className="flex items-center gap-2 text-neutral-500 mb-1 text-[10px] sm:text-xs font-mono uppercase">
                     <Cpu className="w-3 h-3 sm:w-4 sm:h-4 group-hover:text-green-500 transition-colors" />
                     Projects
                   </div>
-                  <div className="text-lg sm:text-2xl font-bold text-white">5+ Deployed</div>
+                  <div className="text-base sm:text-xl font-bold text-white">5+ Deployed</div>
                 </div>
-                <div className="bg-neutral-900/30 border border-neutral-800 p-3 sm:p-4 backdrop-blur-sm hover:border-white/20 transition-colors group">
-                   <div className="flex items-center gap-2 text-neutral-500 mb-2 text-[10px] sm:text-xs font-mono uppercase">
+                <div className="bg-neutral-900/30 border border-neutral-800 p-3 backdrop-blur-sm hover:border-white/20 transition-colors group">
+                   <div className="flex items-center gap-2 text-neutral-500 mb-1 text-[10px] sm:text-xs font-mono uppercase">
                     <Eye className="w-3 h-3 sm:w-4 sm:h-4 group-hover:text-green-500 transition-colors" />
                     Experience
                   </div>
-                  <div className="text-lg sm:text-2xl font-bold text-white">Lead Engineer</div>
+                  <div className="text-base sm:text-xl font-bold text-white">Lead Engineer</div>
                 </div>
              </div>
           </div>
         </div>
 
         {/* Call to Action Buttons */}
-        <div className={`flex flex-col sm:flex-row gap-4 mt-12 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`flex flex-col sm:flex-row gap-4 mt-8 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           <button 
             onClick={() => onNavigate('projects')}
-            className="group bg-white text-black px-8 py-4 font-bold text-sm tracking-wide hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
+            className="group bg-white text-black px-6 py-3 font-bold text-xs sm:text-sm tracking-wide hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             ACCESS_PROJECTS
             <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -258,7 +258,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           
           <button 
             onClick={() => onNavigate('ai_lab')}
-            className="group border border-neutral-700 text-white px-8 py-4 font-bold text-sm tracking-wide hover:border-white hover:bg-white/5 transition-all flex items-center justify-center gap-2 backdrop-blur-md w-full sm:w-auto"
+            className="group border border-neutral-700 text-white px-6 py-3 font-bold text-xs sm:text-sm tracking-wide hover:border-white hover:bg-white/5 transition-all flex items-center justify-center gap-2 backdrop-blur-md w-full sm:w-auto"
           >
             <Command className="w-4 h-4 text-neutral-500 group-hover:text-white transition-colors" />
             INITIALIZE_CHAT
