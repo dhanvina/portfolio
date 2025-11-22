@@ -97,26 +97,114 @@
         z-index: 3;
         width: 100%;
         height: 2px;
+<!DOCTYPE html>
+<html lang="en" class="bg-black">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dhanvina | AI Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              mono: ['"JetBrains Mono"', 'monospace'],
+              sans: ['"Space Grotesk"', 'sans-serif'],
+            },
+            colors: {
+              matrix: '#00ff41',
+              void: '#050505',
+            },
+            animation: {
+              'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'blink': 'blink 1s step-end infinite',
+              'scan': 'scan 4s linear infinite',
+              'glitch': 'glitch 1s linear infinite',
+              'scan-vertical': 'scanVertical 3s linear infinite',
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+            },
+            keyframes: {
+              blink: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0' },
+              },
+              scan: {
+                '0%': { top: '0%' },
+                '100%': { top: '100%' },
+              },
+              glitch: {
+                '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                '62%': { transform: 'translate(0,0) skew(5deg)' },
+              },
+              scanVertical: {
+                '0%': { transform: 'translateY(-100%)' },
+                '100%': { transform: 'translateY(100%)' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #333; 
+        border: 1px solid #000;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #fff; 
+      }
+      
+      /* Grid Background Pattern */
+      .bg-grid {
+        background-size: 40px 40px;
+        background-image: linear-gradient(to right, #222 1px, transparent 1px),
+                          linear-gradient(to bottom, #222 1px, transparent 1px);
+      }
+
+      /* CRT Scanline Effect */
+      .scanline::before {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+        background-size: 100% 4px;
+        z-index: 2;
+        pointer-events: none;
+      }
+      .scanline-bar {
+        position: absolute;
+        z-index: 3;
+        width: 100%;
+        height: 2px;
         background: rgba(255,255,255,0.05);
         opacity: 0.5;
         animation: scan 6s linear infinite;
         pointer-events: none;
       }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "recharts": "https://aistudiocdn.com/recharts@^2.12.0"
-  }
-}
-</script>
+  <script type="module" crossorigin src="/portfolio/assets/index-CMHte1Dh.js"></script>
 </head>
   <body class="bg-black text-white antialiased overflow-x-hidden selection:bg-white selection:text-black">
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>
