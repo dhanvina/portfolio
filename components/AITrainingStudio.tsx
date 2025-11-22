@@ -1,10 +1,11 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Upload, Settings, Play, Cpu, Activity, Save, RotateCcw, Database, Layers, Download, AlertCircle, CheckCircle, Box, FileJson } from 'lucide-react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { Upload, Settings, Play, Cpu, Activity, RotateCcw, Database, Layers, Download, AlertCircle, CheckCircle, Zap, GitCommit } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 type TrainingStatus = 'idle' | 'uploading' | 'ready' | 'training' | 'completed';
 type Tab = 'metrics' | 'architecture';
+type TrainingPhase = 'idle' | 'forward' | 'backward';
 
 interface TrainingMetrics {
   epoch: number;
@@ -13,17 +14,138 @@ interface TrainingMetrics {
 }
 
 const MODELS = [
-  { id: 'cnn', name: 'ConvNeuralNet (CNN)', task: 'Image Classification', layers: ['Conv2D', 'MaxPool', 'Conv2D', 'Dense'] },
-  { id: 'transformer', name: 'Transformer (BERT)', task: 'NLP / Text', layers: ['Embedding', 'SelfAttn', 'FeedFwd', 'Norm'] },
-  { id: 'lstm', name: 'LSTM / GRU', task: 'Time Series', layers: ['Input', 'LSTM Cell', 'Dropout', 'Dense'] },
-  { id: 'rf', name: 'Random Forest', task: 'Tabular Data', layers: ['Bootstrap', 'DecisionTree', 'Vote', 'Output'] },
+  { id: 'cnn', name: 'ConvNeuralNet (CNN)', task: 'Image Classification', layers: [4, 6, 6, 3] },
+  { id: 'transformer', name: 'Transformer (BERT)', task: 'NLP / Text', layers: [4, 8, 8, 4] },
+  { id: 'lstm', name: 'LSTM / GRU', task: 'Time Series', layers: [3, 5, 5, 2] },
+  { id: 'rf', name: 'Random Forest', task: 'Tabular Data', layers: [5, 8, 4, 2] },
 ];
+
+// --- Sub-Component: Neural Network Visualizer ---
+const NeuralNetViz: React.FC<{ structure: number[], phase: TrainingPhase }> = ({ structure, phase }) => {
+  // Calculate positions for nodes
+  const width = 600;
+  const height = 300;
+  
+  const layers = useMemo(() => {
+    return structure.map((nodeCount, layerIndex) => {
+      const x = (width / (structure.length - 1)) * layerIndex;
+      const nodes = Array.from({ length: nodeCount }).map((_, nodeIndex) => {
+        const y = (height / (nodeCount + 1)) * (nodeIndex + 1);
+        return { x, y, id: `l${layerIndex}-n${nodeIndex}` };
+      });
+      return nodes;
+    });
+  }, [structure]);
+
+  // Generate connections
+  const connections = useMemo(() => {
+    const conns = [];
+    for (let i = 0; i < layers.length - 1; i++) {
+      const currentLayer = layers[i];
+      const nextLayer = layers[i + 1];
+      for (const start of currentLayer) {
+        for (const end of nextLayer) {
+          conns.push({ start, end, id: `${start.id}-${end.id}` });
+        }
+      }
+    }
+    return conns;
+  }, [layers]);
+
+  return (
+    <div className="w-full h-full flex items-center justify-center bg-black relative overflow-hidden">
+      {/* Status Overlay */}
+      <div className="absolute top-4 right-4 z-10 font-mono text-xs">
+        <div className={`flex items-center gap-2 transition-all duration-300 ${phase === 'forward' ? 'text-cyan-400 opacity-100' : 'opacity-30'}`}>
+           <div className={`w-2 h-2 rounded-full bg-cyan-400 ${phase === 'forward' ? 'animate-ping' : ''}`} />
+           FORWARD_PASS
+        </div>
+        <div className={`flex items-center gap-2 mt-1 transition-all duration-300 ${phase === 'backward' ? 'text-red-500 opacity-100' : 'opacity-30'}`}>
+           <div className={`w-2 h-2 rounded-full bg-red-500 ${phase === 'backward' ? 'animate-ping' : ''}`} />
+           BACKPROPAGATION
+        </div>
+      </div>
+
+      <svg width="100%" height="100%" viewBox={`0 -20 ${width} ${height + 40}`} className="max-w-2xl">
+        <defs>
+          <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
+        {/* Connections */}
+        {connections.map((conn, i) => (
+          <g key={conn.id}>
+            {/* Base Line */}
+            <line 
+              x1={conn.start.x} y1={conn.start.y} 
+              x2={conn.end.x} y2={conn.end.y} 
+              stroke="#333" 
+              strokeWidth="1" 
+            />
+            
+            {/* Forward Signal */}
+            <line 
+              x1={conn.start.x} y1={conn.start.y} 
+              x2={conn.end.x} y2={conn.end.y} 
+              stroke="#06b6d4" // Cyan
+              strokeWidth={phase === 'forward' ? 2 : 0}
+              strokeDasharray="10,10"
+              className={phase === 'forward' ? 'animate-[dash_1s_linear_infinite]' : ''}
+              opacity={phase === 'forward' ? 0.6 : 0}
+            />
+
+             {/* Backward Signal (Backprop) */}
+             <line 
+              x1={conn.end.x} y1={conn.end.y} 
+              x2={conn.start.x} y2={conn.start.y} 
+              stroke="#ef4444" // Red
+              strokeWidth={phase === 'backward' ? 2 : 0}
+              strokeDasharray="10,10"
+              className={phase === 'backward' ? 'animate-[dash-reverse_1s_linear_infinite]' : ''}
+              opacity={phase === 'backward' ? 0.8 : 0}
+            />
+          </g>
+        ))}
+
+        {/* Nodes */}
+        {layers.flat().map((node, i) => (
+          <circle 
+            key={node.id}
+            cx={node.x} 
+            cy={node.y} 
+            r={phase === 'backward' ? 6 : 4}
+            fill="#000"
+            stroke={phase === 'backward' ? '#ef4444' : phase === 'forward' ? '#06b6d4' : '#555'}
+            strokeWidth="2"
+            className="transition-all duration-300"
+            filter={phase !== 'idle' ? "url(#glow)" : ""}
+          />
+        ))}
+      </svg>
+      
+      {/* CSS Injection for custom SVG animations */}
+      <style>{`
+        @keyframes dash {
+          to { stroke-dashoffset: -20; }
+        }
+        @keyframes dash-reverse {
+          to { stroke-dashoffset: 20; }
+        }
+      `}</style>
+    </div>
+  );
+};
 
 const AITrainingStudio: React.FC = () => {
   const [status, setStatus] = useState<TrainingStatus>('idle');
   const [datasetName, setDatasetName] = useState<string | null>(null);
   const [selectedModel, setSelectedModel] = useState(MODELS[0].id);
   const [activeTab, setActiveTab] = useState<Tab>('metrics');
+  
+  // Training Simulation State
+  const [trainingPhase, setTrainingPhase] = useState<TrainingPhase>('idle');
   
   // Hyperparameters
   const [epochs, setEpochs] = useState(20);
@@ -60,19 +182,26 @@ const AITrainingStudio: React.FC = () => {
     if (status !== 'ready' && status !== 'completed') return;
     
     setStatus('training');
-    setActiveTab('metrics');
+    setActiveTab('metrics'); // Default to metrics, but user can switch to see backprop
     setProgress(0);
     setMetrics([]);
     setLogs([]);
     addLog(`Initializing ${MODELS.find(m => m.id === selectedModel)?.name}...`);
     addLog(`Hyperparams: LR=${learningRate}, Batch=${batchSize}, Epochs=${epochs}`);
-    addLog("Allocating GPU tensors...");
-
+    
     let currentEpoch = 0;
     let currentLoss = 2.5;
     let currentAcc = 0.15;
 
     const interval = setInterval(() => {
+      // 1. Forward Pass Visual
+      setTrainingPhase('forward');
+      
+      // 2. Backprop Visual (Delayed)
+      setTimeout(() => {
+        if (currentEpoch < epochs) setTrainingPhase('backward');
+      }, 250);
+
       currentEpoch++;
       const progressPct = (currentEpoch / epochs) * 100;
       
@@ -99,8 +228,9 @@ const AITrainingStudio: React.FC = () => {
       if (currentEpoch >= epochs) {
         clearInterval(interval);
         setStatus('completed');
+        setTrainingPhase('idle');
         addLog("Training sequence completed successfully.");
-        addLog("Model converged. Weights frozen.");
+        addLog("Model converged. Gradients minimized.");
       }
     }, 500);
   };
@@ -116,60 +246,8 @@ const AITrainingStudio: React.FC = () => {
     setMetrics([]);
     setLogs([]);
     setProgress(0);
+    setTrainingPhase('idle');
     addLog("Session reset. Memory cleared.");
-  };
-
-  // Visualization of Layers
-  const renderArchitecture = () => {
-    const model = MODELS.find(m => m.id === selectedModel);
-    if (!model) return null;
-
-    return (
-      <div className="h-full w-full flex flex-col items-center justify-center p-8 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-green-900/10 via-black to-black opacity-50" />
-        
-        <div className="relative z-10 flex flex-col items-center gap-6 w-full max-w-md">
-          {/* Input Layer */}
-          <div className="flex flex-col items-center gap-2">
-             <div className="w-24 h-8 border border-neutral-700 bg-neutral-900 rounded flex items-center justify-center text-[10px] text-neutral-400 font-mono shadow-[0_0_10px_rgba(255,255,255,0.05)]">
-               INPUT_DATA
-             </div>
-             <div className="h-6 w-px bg-neutral-700" />
-          </div>
-
-          {/* Hidden Layers */}
-          <div className="flex flex-col gap-4 w-full">
-            {model.layers.map((layer, idx) => (
-              <div key={idx} className="relative flex flex-col items-center animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
-                 <div className="w-full h-12 border border-green-500/30 bg-green-500/5 rounded flex items-center justify-between px-4 relative overflow-hidden group hover:border-green-500 hover:bg-green-500/10 transition-all duration-300 hover:scale-105 cursor-crosshair">
-                    <div className="flex items-center gap-3">
-                       <Box className="w-4 h-4 text-green-500" />
-                       <span className="text-sm font-bold text-white">{layer}</span>
-                    </div>
-                    <span className="text-[10px] text-green-500 font-mono opacity-50 group-hover:opacity-100 transition-opacity">
-                      TX_{128 * (idx + 1)}
-                    </span>
-                    {status === 'training' && (
-                      <div className="absolute bottom-0 left-0 h-0.5 bg-green-500 animate-pulse w-full opacity-50" />
-                    )}
-                 </div>
-                 {idx < model.layers.length - 1 && (
-                    <div className="h-4 w-px bg-green-500/30 my-1" />
-                 )}
-              </div>
-            ))}
-          </div>
-
-           {/* Output Layer */}
-           <div className="flex flex-col items-center gap-2">
-             <div className="h-6 w-px bg-neutral-700" />
-             <div className="w-24 h-8 border border-white/20 bg-neutral-800 rounded flex items-center justify-center text-[10px] text-white font-mono shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-               OUTPUT
-             </div>
-          </div>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -276,19 +354,6 @@ const AITrainingStudio: React.FC = () => {
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-xs text-neutral-400 mb-1">
-                    <span>BATCH SIZE</span>
-                    <span className="text-white">{batchSize}</span>
-                  </div>
-                  <input 
-                    type="range" min="8" max="128" step="8" 
-                    value={batchSize} onChange={(e) => setBatchSize(parseInt(e.target.value))}
-                    disabled={status === 'training'}
-                    className="w-full accent-green-500 h-1 bg-neutral-800 rounded-lg appearance-none cursor-pointer hover:bg-neutral-700 transition-colors"
-                  />
-                </div>
-                
-                <div>
                    <div className="flex justify-between text-xs text-neutral-400 mb-1">
                     <span>LEARNING RATE</span>
                     <span className="text-white">{learningRate}</span>
@@ -336,7 +401,7 @@ const AITrainingStudio: React.FC = () => {
         <div className="lg:col-span-8 flex flex-col gap-6">
           
           {/* 1. Visualizer Tabs */}
-          <div className="flex-grow border border-neutral-800 bg-black relative min-h-[400px] flex flex-col hover:border-neutral-700 transition-colors duration-500">
+          <div className="flex-grow border border-neutral-800 bg-black relative min-h-[400px] flex flex-col hover:border-neutral-700 transition-colors duration-500 group">
              {/* Tabs Header */}
              <div className="flex border-b border-neutral-800">
                 <button 
@@ -353,14 +418,21 @@ const AITrainingStudio: React.FC = () => {
                     activeTab === 'architecture' ? 'bg-neutral-900 text-green-500 border-l border-r border-neutral-800' : 'text-neutral-500 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                   <Layers className="w-4 h-4" /> ARCHITECTURE
+                   <GitCommit className="w-4 h-4 rotate-90" /> NEURAL_VIEW
                 </button>
+                <div className="flex-grow flex items-center justify-end px-4 text-[10px] text-neutral-600 font-mono">
+                  {status === 'training' && (
+                    <span className="flex items-center gap-2 animate-pulse">
+                      <Zap className="w-3 h-3 text-yellow-500" /> LEARNING...
+                    </span>
+                  )}
+                </div>
              </div>
 
              {/* Tab Content */}
-             <div className="flex-grow relative p-6">
+             <div className="flex-grow relative">
                {activeTab === 'metrics' && (
-                 <>
+                 <div className="p-6 h-full w-full absolute inset-0">
                    {metrics.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={metrics}>
@@ -376,15 +448,22 @@ const AITrainingStudio: React.FC = () => {
                         </LineChart>
                       </ResponsiveContainer>
                    ) : (
-                     <div className="flex-grow h-full flex items-center justify-center text-neutral-600 font-mono text-xs flex-col gap-2 animate-pulse">
+                     <div className="flex-grow h-full flex items-center justify-center text-neutral-600 font-mono text-xs flex-col gap-2">
                        <AlertCircle className="w-8 h-8 opacity-50" />
                        AWAITING_DATA_STREAM...
                      </div>
                    )}
-                 </>
+                 </div>
                )}
 
-               {activeTab === 'architecture' && renderArchitecture()}
+               {activeTab === 'architecture' && (
+                  <div className="h-full w-full absolute inset-0">
+                     <NeuralNetViz 
+                       structure={MODELS.find(m => m.id === selectedModel)?.layers || [4,6,4,2]} 
+                       phase={trainingPhase}
+                     />
+                  </div>
+               )}
              </div>
           </div>
 
