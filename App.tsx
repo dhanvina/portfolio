@@ -9,6 +9,7 @@ import AIDashboard from './components/AIDashboard';
 import AITrainingStudio from './components/AITrainingStudio';
 import MLOpsPipeline from './components/MLOpsPipeline';
 import Education from './components/Education';
+import Publications from './components/Publications';
 import RevealOnScroll from './components/RevealOnScroll';
 import { PROJECTS, EXPERIENCE, TECH_STACK, SOCIAL_LINKS } from './constants';
 
@@ -48,7 +49,7 @@ const App: React.FC = () => {
 
   if (!mounted) return <div className="bg-black h-screen w-full" />;
 
-  const navItems = ['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'EDUCATION', 'AI_STUDIO', 'MLOPS', 'AI_LAB'];
+  const navItems = ['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'EDUCATION', 'RESEARCH', 'AI_STUDIO', 'MLOPS', 'AI_LAB'];
 
   return (
     <div className="min-h-screen bg-black text-neutral-200 font-mono relative">
@@ -248,6 +249,13 @@ const App: React.FC = () => {
         <section id="education" className="py-12 border-b border-neutral-900 bg-neutral-950/20">
           <RevealOnScroll>
             <Education />
+          </RevealOnScroll>
+        </section>
+
+        {/* Section: Research / Publications */}
+        <section id="research" className="py-12 border-b border-neutral-900">
+          <RevealOnScroll>
+            <Publications />
           </RevealOnScroll>
         </section>
         

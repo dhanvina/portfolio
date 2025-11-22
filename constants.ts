@@ -1,5 +1,5 @@
 
-import { Project, Job, SkillData, TechCategory, EducationItem } from './types';
+import { Project, Job, SkillData, TechCategory, EducationItem, Publication } from './types';
 
 export const SOCIAL_LINKS = {
   github: "https://github.com/dhanvina",
@@ -61,6 +61,37 @@ export const EDUCATION: EducationItem[] = [
     degree: "High School Education",
     period: "Completed 2018",
     grade: "Distinction"
+  }
+];
+
+export const PUBLICATIONS: Publication[] = [
+  {
+    title: "Investigation of Machine Learning Algorithms in Detecting Chronic Kidney Disorder",
+    publisher: "SPRINGER",
+    date: "JUN 7, 2025",
+    description: "A non-trivial effort made in the direction of advancement in machine learning (ML) through the past decade has brought us much ahead in clinical and research settings. This research explores traditional ML algorithms for improving of diagnosis and prognosis of chronic kidney disease (CKD). We study decision trees, support vector machines, and Naive Bayes to arrive at an accurate, robust, and explainable model for predicting the progression of CKD. The comparative study invokes analysis of the proposed models in uncovering patterns, extracting vital components from the diverse patient information and medical imaging to generate accurate prognostic insights.",
+    link: "https://link.springer.com/chapter/10.1007/978-981-96-4241-0_11"
+  },
+  {
+    title: "AI Powered Resource Management System",
+    publisher: "IEEE",
+    date: "JAN 15, 2025",
+    description: "The ongoing problem of manual data entry in education has a novel answer in the form of the AI-Powered Resource Management System. Through the use of cutting-edge technologies and deep learning, it transforms the processing of invoices while lowering errors and streamlining operations. The Vosk speech recognition toolkit makes voice querying simple, increasing automation and accessibility. The system additionally incorporates liveness detection using OpenCV for authentication in order to guarantee robust security.",
+    link: "https://ieeexplore.ieee.org/document/10837375/references#references"
+  },
+  {
+    title: "Speech-enabled machine learning-based automated attendance monitoring system through face recognition",
+    publisher: "IEEE",
+    date: "SEP 30, 2023",
+    description: "Verification, and validation are important issues in computerized systems for security in almost every domain. Face recognition plays a huge role in authenticity. To make this attendance monitoring system more hassle-free, in this paper, we have proposed and implemented an automated speech-recognized attendance monitoring system primarily based on image processing, speech recognition, and the machine learning algorithm LBPH. Our proposed system has been tested robust and efficient in automating the monitoring task.",
+    link: "https://ieeexplore.ieee.org/document/10263205"
+  },
+  {
+    title: "Survey of Regression-Driven Stock-Market-Price-Predictors",
+    publisher: "International Journal of Scientific Research in Science, Engineering and Technology",
+    date: "JUN 17, 2022",
+    description: "The Stock market price prediction is a sophisticated task intrinsically involving the company’s earnings, the market competition, demand, and stability apart from the extrinsic parameters. Thus, multiple algorithms have been written to predict the non-linear and fluctuating Stock price sensitized by the market emotions. Different algorithms have different principles and varying degrees of accuracy.",
+    link: "https://ijsrset.com/IJSRSET22991540"
   }
 ];
 

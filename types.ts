@@ -26,6 +26,14 @@ export interface EducationItem {
   skills?: string[];
 }
 
+export interface Publication {
+  title: string;
+  publisher: string;
+  date: string;
+  description: string;
+  link?: string;
+}
+
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
