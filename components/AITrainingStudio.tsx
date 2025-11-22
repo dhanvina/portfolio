@@ -156,10 +156,12 @@ const AITrainingStudio: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [metrics, setMetrics] = useState<TrainingMetrics[]>([]);
   const [logs, setLogs] = useState<string[]>([]);
-  const logsEndRef = useRef<HTMLDivElement>(null);
+  const logsContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (logsContainerRef.current) {
+      logsContainerRef.current.scrollTop = logsContainerRef.current.scrollHeight;
+    }
   }, [logs]);
 
   const handleUpload = () => {
@@ -253,95 +255,94 @@ const AITrainingStudio: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <div className="p-2 bg-neutral-900 border border-neutral-800 rounded-sm group hover:border-green-500 transition-colors">
-            <Cpu className="w-6 h-6 text-green-500 animate-pulse group-hover:scale-110 transition-transform" />
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-1.5 bg-neutral-900 border border-neutral-800 rounded-sm group hover:border-green-500 transition-colors">
+            <Cpu className="w-5 h-5 text-green-500 animate-pulse group-hover:scale-110 transition-transform" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white tracking-tight">AI_MODEL_STUDIO</h2>
-            <p className="text-neutral-500 font-mono text-xs">v2.4.0 // TRAINING_ENVIRONMENT</p>
+            <h2 className="text-xl font-bold text-white tracking-tight">AI_MODEL_STUDIO</h2>
+            <p className="text-neutral-500 font-mono text-[10px]">v2.4.0 // TRAINING_ENVIRONMENT</p>
           </div>
         </div>
         {status === 'completed' && (
            <button 
              onClick={downloadModel}
-             className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white text-xs font-bold tracking-wider rounded transition-all hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:-translate-y-0.5"
+             className="flex items-center gap-2 px-3 py-1.5 bg-green-600 hover:bg-green-500 text-white text-[10px] font-bold tracking-wider rounded transition-all hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:-translate-y-0.5"
            >
-             <Download className="w-4 h-4" /> EXPORT_MODEL
+             <Download className="w-3 h-3" /> EXPORT
            </button>
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* LEFT COLUMN: Configuration */}
-        <div className="lg:col-span-4 space-y-6">
+        <div className="lg:col-span-4 space-y-4">
           
           {/* 1. Dataset Upload */}
-          <div className="border border-neutral-800 bg-black p-5 relative overflow-hidden group hover:border-neutral-600 transition-colors">
+          <div className="border border-neutral-800 bg-black p-4 relative overflow-hidden group hover:border-neutral-600 transition-colors">
             {status === 'idle' || status === 'uploading' ? (
                <div 
                  onClick={handleUpload}
-                 className="border-2 border-dashed border-neutral-700 rounded-lg p-8 flex flex-col items-center justify-center cursor-pointer hover:border-green-500 hover:bg-neutral-900/50 hover:scale-[1.02] transition-all duration-300 group"
+                 className="border-2 border-dashed border-neutral-700 rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer hover:border-green-500 hover:bg-neutral-900/50 hover:scale-[1.02] transition-all duration-300 group"
                >
-                 <Upload className={`w-8 h-8 mb-3 ${status === 'uploading' ? 'text-green-500 animate-bounce' : 'text-neutral-400 group-hover:text-green-400'}`} />
-                 <span className="text-neutral-300 font-mono text-sm group-hover:text-white">
+                 <Upload className={`w-6 h-6 mb-2 ${status === 'uploading' ? 'text-green-500 animate-bounce' : 'text-neutral-400 group-hover:text-green-400'}`} />
+                 <span className="text-neutral-300 font-mono text-xs group-hover:text-white">
                     {status === 'uploading' ? 'UPLOADING...' : 'DROP_DATASET.CSV'}
                  </span>
-                 <span className="text-neutral-600 text-xs mt-1">Max size: 500MB</span>
+                 <span className="text-neutral-600 text-[10px] mt-1">Max size: 500MB</span>
                </div>
             ) : (
-              <div className="flex items-center justify-between p-4 bg-neutral-900/50 border border-green-900/30 rounded">
-                <div className="flex items-center gap-3">
-                  <Database className="w-5 h-5 text-green-500" />
+              <div className="flex items-center justify-between p-3 bg-neutral-900/50 border border-green-900/30 rounded">
+                <div className="flex items-center gap-2">
+                  <Database className="w-4 h-4 text-green-500" />
                   <div className="flex flex-col">
-                    <span className="text-white text-sm font-mono">{datasetName}</span>
+                    <span className="text-white text-xs font-mono">{datasetName}</span>
                     <span className="text-green-500 text-[10px] uppercase flex items-center gap-1">
-                       <CheckCircle className="w-3 h-3" /> Ready for Training
+                       <CheckCircle className="w-3 h-3" /> Ready
                     </span>
                   </div>
                 </div>
                 <button onClick={resetStudio} className="p-1 hover:bg-red-900/20 rounded text-neutral-500 hover:text-red-500 transition-colors">
-                  <RotateCcw className="w-4 h-4" />
+                  <RotateCcw className="w-3 h-3" />
                 </button>
               </div>
             )}
           </div>
 
           {/* 2. Model Configuration */}
-          <div className={`border border-neutral-800 bg-black p-5 transition-all duration-500 ${status === 'idle' ? 'opacity-50 pointer-events-none grayscale' : 'opacity-100'}`}>
-            <div className="flex items-center gap-2 mb-4 text-neutral-400 font-mono text-xs uppercase tracking-wider">
-              <Settings className="w-4 h-4" /> Configuration
+          <div className={`border border-neutral-800 bg-black p-4 transition-all duration-500 ${status === 'idle' ? 'opacity-50 pointer-events-none grayscale' : 'opacity-100'}`}>
+            <div className="flex items-center gap-2 mb-3 text-neutral-400 font-mono text-[10px] uppercase tracking-wider">
+              <Settings className="w-3 h-3" /> Configuration
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Model Select */}
               <div>
-                <label className="block text-neutral-500 text-xs mb-1">ARCHITECTURE</label>
-                <div className="grid grid-cols-1 gap-2">
+                <label className="block text-neutral-500 text-[10px] mb-1">ARCHITECTURE</label>
+                <div className="grid grid-cols-1 gap-1.5">
                   {MODELS.map(model => (
                     <button
                       key={model.id}
                       onClick={() => setSelectedModel(model.id)}
                       disabled={status === 'training'}
-                      className={`text-left px-3 py-2 border text-sm font-mono transition-all duration-200 hover:scale-[1.01] ${
+                      className={`text-left px-3 py-1.5 border text-xs font-mono transition-all duration-200 hover:scale-[1.01] ${
                         selectedModel === model.id 
                           ? 'border-green-500 bg-green-500/10 text-white' 
                           : 'border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-neutral-300'
                       }`}
                     >
                       <div className="font-bold">{model.name}</div>
-                      <div className="text-[10px] opacity-70">{model.task}</div>
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* Hyperparameters */}
-              <div className="space-y-3 pt-2">
+              <div className="space-y-2 pt-1">
                 <div>
-                  <div className="flex justify-between text-xs text-neutral-400 mb-1">
+                  <div className="flex justify-between text-[10px] text-neutral-400 mb-1">
                     <span>EPOCHS</span>
                     <span className="text-white">{epochs}</span>
                   </div>
@@ -354,7 +355,7 @@ const AITrainingStudio: React.FC = () => {
                 </div>
 
                 <div>
-                   <div className="flex justify-between text-xs text-neutral-400 mb-1">
+                   <div className="flex justify-between text-[10px] text-neutral-400 mb-1">
                     <span>LEARNING RATE</span>
                     <span className="text-white">{learningRate}</span>
                   </div>
@@ -362,7 +363,7 @@ const AITrainingStudio: React.FC = () => {
                     value={learningRate} 
                     onChange={(e) => setLearningRate(parseFloat(e.target.value))}
                     disabled={status === 'training'}
-                    className="w-full bg-neutral-900 border border-neutral-800 text-white text-xs p-2 rounded focus:outline-none focus:border-green-500 hover:border-neutral-600 transition-colors"
+                    className="w-full bg-neutral-900 border border-neutral-800 text-white text-[10px] p-1.5 rounded focus:outline-none focus:border-green-500 hover:border-neutral-600 transition-colors"
                    >
                      <option value="0.01">0.01</option>
                      <option value="0.001">0.001</option>
@@ -376,7 +377,7 @@ const AITrainingStudio: React.FC = () => {
             <button
               onClick={startTraining}
               disabled={status !== 'ready'}
-              className={`w-full mt-6 py-3 flex items-center justify-center gap-2 font-bold text-sm tracking-widest transition-all duration-300 ${
+              className={`w-full mt-4 py-2.5 flex items-center justify-center gap-2 font-bold text-xs tracking-widest transition-all duration-300 ${
                 status === 'ready' 
                   ? 'bg-white text-black hover:bg-green-500 hover:text-white shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transform hover:-translate-y-0.5' 
                   : status === 'training' 
@@ -387,38 +388,38 @@ const AITrainingStudio: React.FC = () => {
               }`}
             >
               {status === 'training' ? (
-                <>TRAINING <Activity className="w-4 h-4 animate-spin" /></>
+                <>TRAINING <Activity className="w-3 h-3 animate-spin" /></>
               ) : status === 'completed' ? (
-                <>COMPLETED <CheckCircle className="w-4 h-4" /></>
+                <>COMPLETED <CheckCircle className="w-3 h-3" /></>
               ) : (
-                <>INITIATE_TRAINING <Play className="w-4 h-4" /></>
+                <>INITIATE_TRAINING <Play className="w-3 h-3" /></>
               )}
             </button>
           </div>
         </div>
 
         {/* RIGHT COLUMN: Visualization & Terminal */}
-        <div className="lg:col-span-8 flex flex-col gap-6">
+        <div className="lg:col-span-8 flex flex-col gap-4">
           
           {/* 1. Visualizer Tabs */}
-          <div className="flex-grow border border-neutral-800 bg-black relative min-h-[400px] flex flex-col hover:border-neutral-700 transition-colors duration-500 group">
+          <div className="flex-grow border border-neutral-800 bg-black relative min-h-[350px] flex flex-col hover:border-neutral-700 transition-colors duration-500 group">
              {/* Tabs Header */}
-             <div className="flex border-b border-neutral-800">
+             <div className="flex border-b border-neutral-800 h-10">
                 <button 
                   onClick={() => setActiveTab('metrics')}
-                  className={`px-6 py-3 text-xs font-bold tracking-wider flex items-center gap-2 transition-colors ${
+                  className={`px-4 text-[10px] font-bold tracking-wider flex items-center gap-2 transition-colors ${
                     activeTab === 'metrics' ? 'bg-neutral-900 text-green-500 border-r border-neutral-800' : 'text-neutral-500 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                   <Activity className="w-4 h-4" /> LIVE_METRICS
+                   <Activity className="w-3 h-3" /> METRICS
                 </button>
                 <button 
                   onClick={() => setActiveTab('architecture')}
-                  className={`px-6 py-3 text-xs font-bold tracking-wider flex items-center gap-2 transition-colors ${
+                  className={`px-4 text-[10px] font-bold tracking-wider flex items-center gap-2 transition-colors ${
                     activeTab === 'architecture' ? 'bg-neutral-900 text-green-500 border-l border-r border-neutral-800' : 'text-neutral-500 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                   <GitCommit className="w-4 h-4 rotate-90" /> NEURAL_VIEW
+                   <GitCommit className="w-3 h-3 rotate-90" /> NETWORK
                 </button>
                 <div className="flex-grow flex items-center justify-end px-4 text-[10px] text-neutral-600 font-mono">
                   {status === 'training' && (
@@ -432,7 +433,7 @@ const AITrainingStudio: React.FC = () => {
              {/* Tab Content */}
              <div className="flex-grow relative">
                {activeTab === 'metrics' && (
-                 <div className="p-6 h-full w-full absolute inset-0">
+                 <div className="p-4 h-full w-full absolute inset-0">
                    {metrics.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={metrics}>
@@ -449,7 +450,7 @@ const AITrainingStudio: React.FC = () => {
                       </ResponsiveContainer>
                    ) : (
                      <div className="flex-grow h-full flex items-center justify-center text-neutral-600 font-mono text-xs flex-col gap-2">
-                       <AlertCircle className="w-8 h-8 opacity-50" />
+                       <AlertCircle className="w-6 h-6 opacity-50" />
                        AWAITING_DATA_STREAM...
                      </div>
                    )}
@@ -468,25 +469,27 @@ const AITrainingStudio: React.FC = () => {
           </div>
 
           {/* 2. Terminal Output */}
-          <div className="h-48 border border-neutral-800 bg-neutral-950 p-4 font-mono text-xs overflow-y-auto">
-            <div className="mb-2 text-neutral-500 uppercase tracking-wider border-b border-neutral-800 pb-1 text-[10px] flex justify-between">
+          <div 
+            ref={logsContainerRef}
+            className="h-40 border border-neutral-800 bg-neutral-950 p-3 font-mono text-[10px] overflow-y-auto scroll-smooth"
+          >
+            <div className="mb-2 text-neutral-500 uppercase tracking-wider border-b border-neutral-800 pb-1 flex justify-between">
               <span>System Logs</span>
               <span className="text-neutral-600">/var/log/training.log</span>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {status === 'idle' && <div className="text-neutral-600">System idle. Waiting for dataset configuration...</div>}
               {logs.map((log, i) => (
                 <div key={i} className="text-neutral-300 break-all">
                   <span className="text-green-900 mr-2">{'>'}</span>{log}
                 </div>
               ))}
-              <div ref={logsEndRef} />
             </div>
           </div>
 
           {/* Progress Bar (Only visible during training) */}
           {(status === 'training' || status === 'completed') && (
-             <div className="relative h-2 bg-neutral-900 w-full rounded-full overflow-hidden">
+             <div className="relative h-1.5 bg-neutral-900 w-full rounded-full overflow-hidden">
                <div 
                  className="absolute top-0 left-0 h-full bg-green-500 transition-all duration-300 ease-out shadow-[0_0_10px_#22c55e]"
                  style={{ width: `${progress}%` }}

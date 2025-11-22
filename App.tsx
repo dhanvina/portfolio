@@ -57,7 +57,7 @@ const App: React.FC = () => {
       {/* Navigation Bar */}
       <nav className="fixed top-0 left-0 w-full z-50 border-b border-neutral-800 bg-black/80 backdrop-blur-md transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14 md:h-16">
             <div className="flex items-center gap-2 cursor-pointer group" onClick={() => scrollTo('home')}>
               <div className="w-3 h-3 bg-white animate-pulse group-hover:bg-green-500 transition-colors" />
               <span className="font-bold tracking-wider text-white group-hover:text-green-500 transition-colors">N_DHANVINA</span>
@@ -65,12 +65,12 @@ const App: React.FC = () => {
             
             {/* Desktop Menu */}
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
+              <div className="ml-10 flex items-baseline space-x-6 lg:space-x-8">
                 {navItems.map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollTo(item.toLowerCase())}
-                    className={`hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:bg-white/5 ${
+                    className={`hover:text-white px-2 py-2 rounded-md text-xs lg:text-sm font-medium transition-all duration-300 hover:bg-white/5 ${
                       activeSection === item.toLowerCase() ? 'text-white border-b-2 border-white' : 'text-neutral-500'
                     }`}
                   >
@@ -94,13 +94,13 @@ const App: React.FC = () => {
 
         {/* Mobile Menu Drawer */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-black border-b border-neutral-800 absolute w-full left-0 top-16 shadow-2xl animate-fade-in-up">
+          <div className="md:hidden bg-black border-b border-neutral-800 absolute w-full left-0 top-14 shadow-2xl animate-fade-in-up">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
               {navItems.map((item) => (
                 <button
                   key={item}
                   onClick={() => scrollTo(item.toLowerCase())}
-                  className={`text-left block px-3 py-4 rounded-md text-base font-bold tracking-wider border-l-4 transition-all ${
+                  className={`text-left block px-3 py-3 rounded-md text-sm font-bold tracking-wider border-l-4 transition-all ${
                     activeSection === item.toLowerCase() 
                       ? 'border-green-500 text-white bg-white/5' 
                       : 'border-transparent text-neutral-500 hover:text-white hover:bg-white/5'
@@ -116,25 +116,25 @@ const App: React.FC = () => {
 
       <main className="relative z-10 pt-16">
         {/* Section: Home / Hero */}
-        <section id="home" className="min-h-[90vh] flex flex-col justify-center items-center px-4 border-b border-neutral-900">
+        <section id="home" className="min-h-[85vh] flex flex-col justify-center items-center px-4 border-b border-neutral-900">
           <Hero onNavigate={scrollTo} />
         </section>
 
         {/* Section: About */}
-        <section id="about" className="py-16 border-b border-neutral-900 bg-neutral-950/20">
+        <section id="about" className="py-12 border-b border-neutral-900 bg-neutral-950/20">
           <About />
         </section>
 
         {/* Section: Projects */}
-        <section id="projects" className="py-24 border-b border-neutral-900">
+        <section id="projects" className="py-16 border-b border-neutral-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <RevealOnScroll>
-              <div className="flex items-center gap-4 mb-12">
-                <Cpu className="w-8 h-8 text-white" />
+              <div className="flex items-center gap-4 mb-8">
+                <Cpu className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">DEPLOYED_SYSTEMS</h2>
               </div>
             </RevealOnScroll>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {PROJECTS.map((project, index) => (
                 <RevealOnScroll key={project.id} delay={index * 100} className="h-full">
                   <ProjectCard project={project} />
@@ -145,33 +145,33 @@ const App: React.FC = () => {
         </section>
 
         {/* Section: Skills & Analytics */}
-        <section id="skills" className="py-24 border-b border-neutral-900 bg-neutral-950/30">
+        <section id="skills" className="py-16 border-b border-neutral-900 bg-neutral-950/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               
               {/* Tech Stack Grid */}
               <div>
                 <RevealOnScroll>
-                   <div className="flex items-center gap-4 mb-8">
-                    <Layers className="w-8 h-8 text-white" />
+                   <div className="flex items-center gap-4 mb-6">
+                    <Layers className="w-6 h-6 md:w-8 md:h-8 text-white" />
                     <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">TECH_ARSENAL</h2>
                   </div>
-                  <p className="text-neutral-400 mb-8 leading-relaxed">
+                  <p className="text-neutral-400 mb-6 leading-relaxed text-sm md:text-base">
                     Comprehensive stack specialized for end-to-end AI development, from <span className="text-white">data engineering</span> to <span className="text-white">model deployment</span>.
                   </p>
                 </RevealOnScroll>
                 
-                <div className="grid grid-cols-1 gap-6">
+                <div className="grid grid-cols-1 gap-4">
                   {TECH_STACK.map((stack, idx) => (
                     <RevealOnScroll key={idx} delay={idx * 100}>
-                      <div className="border border-neutral-800 bg-black p-4 hover:border-green-500/50 hover:shadow-[0_0_15px_rgba(34,197,94,0.05)] transition-all duration-300 group">
-                        <h3 className="text-xs font-bold text-green-500 mb-3 tracking-wider uppercase flex items-center gap-2">
+                      <div className="border border-neutral-800 bg-black p-3 hover:border-green-500/50 hover:shadow-[0_0_15px_rgba(34,197,94,0.05)] transition-all duration-300 group">
+                        <h3 className="text-xs font-bold text-green-500 mb-2 tracking-wider uppercase flex items-center gap-2">
                           <span className="w-1 h-1 bg-green-500 rounded-full group-hover:scale-150 transition-transform"></span>
                           {stack.category}
                         </h3>
                         <div className="flex flex-wrap gap-2">
                           {stack.skills.map((skill) => (
-                            <span key={skill} className="text-sm text-neutral-300 bg-neutral-900 px-2 py-1 border border-neutral-800 hover:text-white hover:border-neutral-600 transition-colors">
+                            <span key={skill} className="text-xs text-neutral-300 bg-neutral-900 px-2 py-1 border border-neutral-800 hover:text-white hover:border-neutral-600 transition-colors">
                               {skill}
                             </span>
                           ))}
@@ -185,12 +185,12 @@ const App: React.FC = () => {
               {/* Radar Chart */}
               <div className="sticky top-24">
                  <RevealOnScroll delay={300}>
-                   <div className="flex items-center gap-4 mb-8 lg:justify-end">
-                    <Brain className="w-8 h-8 text-white" />
+                   <div className="flex items-center gap-4 mb-6 lg:justify-end">
+                    <Brain className="w-6 h-6 md:w-8 md:h-8 text-white" />
                     <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">NEURAL_MATRIX</h2>
                   </div>
-                  <div className="bg-black border border-neutral-800 p-6 relative hover:border-neutral-700 transition-colors duration-500">
-                    <div className="absolute top-0 left-0 bg-white text-black text-xs px-2 py-1 font-bold">FIG_1.1</div>
+                  <div className="bg-black border border-neutral-800 p-4 relative hover:border-neutral-700 transition-colors duration-500">
+                    <div className="absolute top-0 left-0 bg-white text-black text-[10px] px-2 py-1 font-bold">FIG_1.1</div>
                     <SkillChart />
                   </div>
                 </RevealOnScroll>
@@ -201,29 +201,29 @@ const App: React.FC = () => {
         </section>
 
          {/* Section: Experience */}
-         <section id="experience" className="py-24 border-b border-neutral-900">
+         <section id="experience" className="py-16 border-b border-neutral-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
              <RevealOnScroll>
-               <div className="flex items-center gap-4 mb-12">
-                <Terminal className="w-8 h-8 text-white" />
+               <div className="flex items-center gap-4 mb-8">
+                <Terminal className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">EXECUTION_LOG</h2>
               </div>
             </RevealOnScroll>
             
-            <div className="relative border-l border-neutral-800 ml-4 space-y-12">
+            <div className="relative border-l border-neutral-800 ml-4 space-y-10">
               {EXPERIENCE.map((job, index) => (
                 <RevealOnScroll key={index} delay={index * 200}>
                   <div className="pl-8 relative group">
                     <div className="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-black border border-neutral-500 group-hover:bg-white group-hover:scale-125 transition-all duration-300" />
-                    <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-2">
-                      <h3 className="text-xl font-bold text-white group-hover:text-green-400 transition-colors">{job.role}</h3>
-                      <span className="text-sm text-neutral-500 font-mono">{job.period}</span>
+                    <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between mb-1">
+                      <h3 className="text-lg font-bold text-white group-hover:text-green-400 transition-colors">{job.role}</h3>
+                      <span className="text-xs text-neutral-500 font-mono">{job.period}</span>
                     </div>
-                    <h4 className="text-green-500 mb-4 font-mono text-sm">{job.company}</h4>
+                    <h4 className="text-green-500 mb-3 font-mono text-sm">{job.company}</h4>
                     
-                    <ul className="list-disc list-outside ml-4 space-y-2 mb-6">
+                    <ul className="list-disc list-outside ml-4 space-y-1.5 mb-4">
                       {job.description.map((desc, i) => (
-                        <li key={i} className="text-neutral-400 leading-relaxed pl-2 marker:text-neutral-600 hover:text-neutral-200 transition-colors text-sm md:text-base">
+                        <li key={i} className="text-neutral-400 leading-relaxed pl-2 marker:text-neutral-600 hover:text-neutral-200 transition-colors text-sm">
                           {desc}
                         </li>
                       ))}
@@ -231,7 +231,7 @@ const App: React.FC = () => {
 
                     <div className="flex flex-wrap gap-2">
                       {job.stack.map((tech) => (
-                        <span key={tech} className="text-xs border border-neutral-800 px-2 py-1 text-neutral-500 hover:text-white hover:border-neutral-600 transition-colors">
+                        <span key={tech} className="text-[10px] border border-neutral-800 px-2 py-0.5 text-neutral-500 hover:text-white hover:border-neutral-600 transition-colors">
                           {tech}
                         </span>
                       ))}
@@ -244,25 +244,25 @@ const App: React.FC = () => {
         </section>
         
         {/* Section: AI Training Studio */}
-        <section id="ai_studio" className="py-24 border-b border-neutral-900 bg-neutral-950/30">
+        <section id="ai_studio" className="py-16 border-b border-neutral-900 bg-neutral-950/30">
            <RevealOnScroll>
              <AITrainingStudio />
            </RevealOnScroll>
         </section>
 
         {/* Section: MLOps Pipeline */}
-        <section id="mlops" className="py-24 border-b border-neutral-900">
+        <section id="mlops" className="py-16 border-b border-neutral-900">
            <RevealOnScroll>
              <MLOpsPipeline />
            </RevealOnScroll>
         </section>
 
         {/* Section: AI Lab / Neural Operations Center */}
-        <section id="ai_lab" className="py-10 border-b border-neutral-900 bg-neutral-950/50">
+        <section id="ai_lab" className="py-12 border-b border-neutral-900 bg-neutral-950/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
              <RevealOnScroll>
                <div className="flex items-center gap-4 mb-6">
-                <Code className="w-8 h-8 text-white" />
+                <Code className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">NEURAL_OPERATIONS_CENTER</h2>
               </div>
               <div className="w-full">
@@ -273,11 +273,11 @@ const App: React.FC = () => {
         </section>
 
         {/* Footer */}
-        <footer className="py-12 bg-black border-t border-neutral-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
-            <div className="flex flex-col gap-2">
-              <span className="font-bold text-white tracking-wider hover:text-green-500 transition-colors cursor-default">N_DHANVINA</span>
-              <span className="text-xs text-neutral-600">LEAD AI ENGINEER // ndhanvina07@gmail.com</span>
+        <footer className="py-8 bg-black border-t border-neutral-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <div className="flex flex-col gap-1">
+              <span className="font-bold text-white tracking-wider hover:text-green-500 transition-colors cursor-default text-sm">N_DHANVINA</span>
+              <span className="text-[10px] text-neutral-600">LEAD AI ENGINEER // ndhanvina07@gmail.com</span>
             </div>
             
             <div className="flex gap-6">
