@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
 import { streamGeminiResponse } from '../services/geminiService';
@@ -33,11 +34,16 @@ const AIChat: React.FC = () => {
     { role: 'model', text: 'System initialized. Neural Interface v4.0 ready.\nExecute "help" for available commands or query system parameters directly.' }
   ]);
   const [isLoading, setIsLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Ref for the container div instead of a dummy element
+  const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
-    messagesEndRef.current?.scrollIntoView({ behavior });
+  // Use scrollTop instead of scrollIntoView to prevent scrolling the main window
+  const scrollToBottom = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
   };
 
   useEffect(() => {
@@ -168,7 +174,10 @@ const AIChat: React.FC = () => {
   return (
     <div className="h-full flex flex-col bg-black font-mono text-sm relative" onClick={() => inputRef.current?.focus()}>
       {/* Messages Area */}
-      <div className="flex-grow overflow-y-auto p-4 space-y-4 scrollbar-hide">
+      <div 
+        ref={containerRef}
+        className="flex-grow overflow-y-auto p-4 space-y-4 scrollbar-hide"
+      >
         {messages.map((msg, idx) => (
           <div key={idx} className="break-words">
             {msg.role === 'user' ? (
@@ -183,7 +192,7 @@ const AIChat: React.FC = () => {
                   This ensures history is static (perf) but active response is animated.
                 */}
                 {idx === messages.length - 1 && msg.role === 'model' ? (
-                   <Typewriter text={msg.text} onUpdate={() => scrollToBottom("auto")} />
+                   <Typewriter text={msg.text} onUpdate={scrollToBottom} />
                 ) : (
                    <span className="whitespace-pre-wrap leading-relaxed">{msg.text}</span>
                 )}
@@ -196,7 +205,6 @@ const AIChat: React.FC = () => {
             )}
           </div>
         ))}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input Area */}
@@ -211,7 +219,6 @@ const AIChat: React.FC = () => {
             onKeyDown={handleKeyDown}
             disabled={isLoading}
             className="flex-grow bg-transparent border-none text-white focus:outline-none focus:ring-0 p-0 font-mono placeholder-neutral-700"
-            autoFocus
             autoComplete="off"
             spellCheck="false"
           />

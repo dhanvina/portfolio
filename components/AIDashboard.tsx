@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, YAxis, ResponsiveContainer } from 'recharts';
 import { Activity, Wifi, Server, Shield, Zap } from 'lucide-react';
@@ -37,7 +38,7 @@ const SystemHeartbeat: React.FC = () => {
           {Math.round(data[data.length - 1]?.value || 0)}%
         </div>
       </div>
-      <div className="flex-grow bg-black relative overflow-hidden">
+      <div className="flex-grow bg-black relative overflow-hidden min-h-[120px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
             <YAxis domain={[0, 100]} hide />
@@ -73,7 +74,7 @@ const NetworkVisualizer: React.FC = () => {
         </div>
       </div>
       
-      <div className="flex-grow relative flex items-center justify-center">
+      <div className="flex-grow relative flex items-center justify-center min-h-[120px]">
         {/* Simple SVG Animation for Network */}
         <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="none">
            <defs>
@@ -119,7 +120,7 @@ interface HeaderStatusProps {
 const HeaderStatus: React.FC<HeaderStatusProps> = ({ icon, label, tooltip, textColor }) => (
   <div className="group relative flex items-center gap-1 cursor-help transition-colors hover:text-neutral-300">
     {icon}
-    <span className={textColor}>{label}</span>
+    <span className={`${textColor} hidden sm:inline`}>{label}</span>
     {/* Tooltip */}
     <div className="absolute top-full right-0 mt-2 w-56 p-2 bg-neutral-900/95 backdrop-blur-md border border-neutral-700 rounded shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-[60]">
       <div className="text-[10px] font-bold text-neutral-500 mb-1 border-b border-neutral-800 pb-1 flex justify-between">
@@ -133,21 +134,21 @@ const HeaderStatus: React.FC<HeaderStatusProps> = ({ icon, label, tooltip, textC
 
 const AIDashboard: React.FC = () => {
   return (
-    <div className="w-full max-w-7xl mx-auto border border-neutral-800 bg-neutral-950/80 shadow-2xl relative overflow-hidden">
+    <div className="w-full max-w-7xl mx-auto border border-neutral-800 bg-neutral-950/80 shadow-2xl relative overflow-hidden flex flex-col">
       {/* CRT Scanline Overlay */}
       <div className="scanline absolute inset-0 pointer-events-none z-50">
         <div className="scanline-bar"></div>
       </div>
 
       {/* Dashboard Header */}
-      <div className="h-10 border-b border-neutral-800 flex items-center justify-between px-4 bg-neutral-900 relative z-20">
+      <div className="h-12 border-b border-neutral-800 flex items-center justify-between px-4 bg-neutral-900 relative z-20 flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="flex gap-1.5">
             <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
             <div className="w-3 h-3 rounded-full bg-green-500 border border-green-400 animate-pulse" />
           </div>
-          <span className="text-xs font-mono text-neutral-400 tracking-widest">NEURAL_OPERATIONS_CENTER</span>
+          <span className="text-[10px] sm:text-xs font-mono text-neutral-400 tracking-widest">NEURAL_OPS_CENTER</span>
         </div>
         <div className="flex items-center gap-4 text-xs font-mono text-neutral-500">
           <HeaderStatus 
@@ -169,23 +170,23 @@ const AIDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Dashboard Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 h-[450px]">
+      {/* Dashboard Grid - Responsive Stacking */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 h-auto lg:h-[500px]">
         
-        {/* Left Sidebar: Metrics & Viz (3 cols) */}
-        <div className="lg:col-span-3 border-r border-neutral-800 flex flex-col">
-          <div className="h-1/2 border-b border-neutral-800">
+        {/* Left Sidebar: Metrics & Viz */}
+        <div className="lg:col-span-3 border-r-0 border-b lg:border-b-0 lg:border-r border-neutral-800 flex flex-row lg:flex-col h-auto lg:h-full">
+          <div className="w-1/2 lg:w-full border-r lg:border-r-0 border-b-0 lg:border-b border-neutral-800 h-32 lg:h-1/2">
             <SystemHeartbeat />
           </div>
-          <div className="h-1/2">
+          <div className="w-1/2 lg:w-full h-32 lg:h-1/2">
             <NetworkVisualizer />
           </div>
         </div>
 
-        {/* Main Content: Terminal Chat (9 cols) */}
-        <div className="lg:col-span-9 bg-black relative flex flex-col">
+        {/* Main Content: Terminal Chat */}
+        <div className="lg:col-span-9 bg-black relative flex flex-col h-[400px] lg:h-full">
           {/* Terminal Header */}
-          <div className="absolute top-2 right-4 z-10 text-[10px] font-mono text-neutral-600">
+          <div className="absolute top-2 right-4 z-10 text-[10px] font-mono text-neutral-600 hidden sm:block">
             SESSION_ID: 0x8F2A9C
           </div>
           <AIChat />
@@ -193,11 +194,11 @@ const AIDashboard: React.FC = () => {
       </div>
 
       {/* Dashboard Footer */}
-      <div className="h-8 border-t border-neutral-800 bg-neutral-900 flex items-center px-4 justify-between">
-         <div className="text-[10px] font-mono text-neutral-500">
-            MEM: 64GB / 128GB | GPU: RTX 4090 [ACTIVE]
+      <div className="h-8 border-t border-neutral-800 bg-neutral-900 flex items-center px-4 justify-between flex-shrink-0">
+         <div className="text-[10px] font-mono text-neutral-500 truncate mr-2">
+            MEM: 64GB | GPU: RTX 4090 [ACTIVE]
          </div>
-         <div className="text-[10px] font-mono text-neutral-500 animate-pulse">
+         <div className="text-[10px] font-mono text-neutral-500 animate-pulse whitespace-nowrap">
             WAITING_FOR_INPUT...
          </div>
       </div>

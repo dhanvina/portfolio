@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Terminal, Cpu, Brain, Code, ChevronRight, Share2, Mail, Github, Linkedin, Layers, Workflow } from 'lucide-react';
+import { Terminal, Cpu, Brain, Code, ChevronRight, Share2, Mail, Github, Linkedin, Layers, Workflow, Menu, X } from 'lucide-react';
 import Hero from './components/Hero';
 import About from './components/About';
 import SkillChart from './components/SkillChart';
@@ -14,9 +14,26 @@ import { PROJECTS, EXPERIENCE, TECH_STACK } from './constants';
 const App: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('home');
   const [mounted, setMounted] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    // Prevent browser scroll restoration
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    
+    // Force scroll to top immediately
+    window.scrollTo(0, 0);
+
+    // Set mounted to render content
     setMounted(true);
+
+    // Double check scroll position after a brief tick to override any layout shifts
+    const timeout = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 50);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   const scrollTo = (id: string) => {
@@ -24,17 +41,20 @@ const App: React.FC = () => {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setActiveSection(id);
+      setIsMobileMenuOpen(false); // Close mobile menu after click
     }
   };
 
   if (!mounted) return <div className="bg-black h-screen w-full" />;
+
+  const navItems = ['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'AI_STUDIO', 'MLOPS', 'AI_LAB'];
 
   return (
     <div className="min-h-screen bg-black text-neutral-200 font-mono relative">
       {/* Background Grid */}
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none z-0" />
       
-      {/* Navigation Bar - Sticky Left or Top depending on mobile */}
+      {/* Navigation Bar */}
       <nav className="fixed top-0 left-0 w-full z-50 border-b border-neutral-800 bg-black/80 backdrop-blur-md transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -42,9 +62,11 @@ const App: React.FC = () => {
               <div className="w-3 h-3 bg-white animate-pulse group-hover:bg-green-500 transition-colors" />
               <span className="font-bold tracking-wider text-white group-hover:text-green-500 transition-colors">N_DHANVINA</span>
             </div>
+            
+            {/* Desktop Menu */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
-                {['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'AI_STUDIO', 'MLOPS', 'AI_LAB'].map((item) => (
+                {navItems.map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollTo(item.toLowerCase())}
@@ -57,8 +79,39 @@ const App: React.FC = () => {
                 ))}
               </div>
             </div>
+
+            {/* Mobile Menu Toggle */}
+            <div className="md:hidden">
+              <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-neutral-400 hover:text-white focus:outline-none p-2"
+              >
+                {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Mobile Menu Drawer */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-black border-b border-neutral-800 absolute w-full left-0 top-16 shadow-2xl animate-fade-in-up">
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
+              {navItems.map((item) => (
+                <button
+                  key={item}
+                  onClick={() => scrollTo(item.toLowerCase())}
+                  className={`text-left block px-3 py-4 rounded-md text-base font-bold tracking-wider border-l-4 transition-all ${
+                    activeSection === item.toLowerCase() 
+                      ? 'border-green-500 text-white bg-white/5' 
+                      : 'border-transparent text-neutral-500 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </nav>
 
       <main className="relative z-10 pt-16">
@@ -67,7 +120,7 @@ const App: React.FC = () => {
           <Hero onNavigate={scrollTo} />
         </section>
 
-        {/* Section: About - Reduced Padding */}
+        {/* Section: About */}
         <section id="about" className="py-16 border-b border-neutral-900 bg-neutral-950/20">
           <About />
         </section>
@@ -78,7 +131,7 @@ const App: React.FC = () => {
             <RevealOnScroll>
               <div className="flex items-center gap-4 mb-12">
                 <Cpu className="w-8 h-8 text-white" />
-                <h2 className="text-3xl font-bold text-white tracking-tight">DEPLOYED_SYSTEMS</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">DEPLOYED_SYSTEMS</h2>
               </div>
             </RevealOnScroll>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -101,7 +154,7 @@ const App: React.FC = () => {
                 <RevealOnScroll>
                    <div className="flex items-center gap-4 mb-8">
                     <Layers className="w-8 h-8 text-white" />
-                    <h2 className="text-3xl font-bold text-white tracking-tight">TECH_ARSENAL</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">TECH_ARSENAL</h2>
                   </div>
                   <p className="text-neutral-400 mb-8 leading-relaxed">
                     Comprehensive stack specialized for end-to-end AI development, from <span className="text-white">data engineering</span> to <span className="text-white">model deployment</span>.
@@ -134,7 +187,7 @@ const App: React.FC = () => {
                  <RevealOnScroll delay={300}>
                    <div className="flex items-center gap-4 mb-8 lg:justify-end">
                     <Brain className="w-8 h-8 text-white" />
-                    <h2 className="text-3xl font-bold text-white tracking-tight">NEURAL_MATRIX</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">NEURAL_MATRIX</h2>
                   </div>
                   <div className="bg-black border border-neutral-800 p-6 relative hover:border-neutral-700 transition-colors duration-500">
                     <div className="absolute top-0 left-0 bg-white text-black text-xs px-2 py-1 font-bold">FIG_1.1</div>
@@ -153,7 +206,7 @@ const App: React.FC = () => {
              <RevealOnScroll>
                <div className="flex items-center gap-4 mb-12">
                 <Terminal className="w-8 h-8 text-white" />
-                <h2 className="text-3xl font-bold text-white tracking-tight">EXECUTION_LOG</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">EXECUTION_LOG</h2>
               </div>
             </RevealOnScroll>
             
@@ -170,7 +223,7 @@ const App: React.FC = () => {
                     
                     <ul className="list-disc list-outside ml-4 space-y-2 mb-6">
                       {job.description.map((desc, i) => (
-                        <li key={i} className="text-neutral-400 leading-relaxed pl-2 marker:text-neutral-600 hover:text-neutral-200 transition-colors">
+                        <li key={i} className="text-neutral-400 leading-relaxed pl-2 marker:text-neutral-600 hover:text-neutral-200 transition-colors text-sm md:text-base">
                           {desc}
                         </li>
                       ))}
@@ -197,7 +250,7 @@ const App: React.FC = () => {
            </RevealOnScroll>
         </section>
 
-        {/* Section: MLOps Pipeline (NEW) */}
+        {/* Section: MLOps Pipeline */}
         <section id="mlops" className="py-24 border-b border-neutral-900">
            <RevealOnScroll>
              <MLOpsPipeline />
@@ -210,7 +263,7 @@ const App: React.FC = () => {
              <RevealOnScroll>
                <div className="flex items-center gap-4 mb-6">
                 <Code className="w-8 h-8 text-white" />
-                <h2 className="text-3xl font-bold text-white tracking-tight">NEURAL_OPERATIONS_CENTER</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">NEURAL_OPERATIONS_CENTER</h2>
               </div>
               <div className="w-full">
                 <AIDashboard />
@@ -221,7 +274,7 @@ const App: React.FC = () => {
 
         {/* Footer */}
         <footer className="py-12 bg-black border-t border-neutral-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
             <div className="flex flex-col gap-2">
               <span className="font-bold text-white tracking-wider hover:text-green-500 transition-colors cursor-default">N_DHANVINA</span>
               <span className="text-xs text-neutral-600">LEAD AI ENGINEER // ndhanvina07@gmail.com</span>

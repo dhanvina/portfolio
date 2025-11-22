@@ -146,11 +146,11 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
 
       {/* 2. Decorative HUD Overlay Elements */}
       <div className="absolute inset-0 pointer-events-none select-none z-10">
-        {/* Corner Brackets */}
-        <div className={`absolute top-10 left-10 w-16 h-16 border-l-2 border-t-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-10 -translate-y-10'}`} />
-        <div className={`absolute top-10 right-10 w-16 h-16 border-r-2 border-t-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-10 -translate-y-10'}`} />
-        <div className={`absolute bottom-10 left-10 w-16 h-16 border-l-2 border-b-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-10 translate-y-10'}`} />
-        <div className={`absolute bottom-10 right-10 w-16 h-16 border-r-2 border-b-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-10 translate-y-10'}`} />
+        {/* Corner Brackets - Hidden on small screens to save space */}
+        <div className={`hidden sm:block absolute top-10 left-10 w-16 h-16 border-l-2 border-t-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-10 -translate-y-10'}`} />
+        <div className={`hidden sm:block absolute top-10 right-10 w-16 h-16 border-r-2 border-t-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-10 -translate-y-10'}`} />
+        <div className={`hidden sm:block absolute bottom-10 left-10 w-16 h-16 border-l-2 border-b-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 -translate-x-10 translate-y-10'}`} />
+        <div className={`hidden sm:block absolute bottom-10 right-10 w-16 h-16 border-r-2 border-b-2 border-neutral-700 transition-all duration-1000 ${isLoaded ? 'opacity-100 translate-x-0 translate-y-0' : 'opacity-0 translate-x-10 translate-y-10'}`} />
 
         {/* Scanning Line */}
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-white/5 to-transparent animate-scan-vertical pointer-events-none" />
@@ -183,19 +183,19 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
           </span>
-          <span className="text-xs font-mono tracking-widest text-neutral-400">
+          <span className="text-[10px] sm:text-xs font-mono tracking-widest text-neutral-400">
             SYSTEM_ONLINE <span className="text-neutral-600 mx-2">||</span> AI_ENGINEER
           </span>
         </div>
 
         {/* Identity Verification & Name */}
         <div className="mb-8">
-          <div className={`text-sm md:text-base font-mono text-neutral-500 mb-2 flex items-center gap-2 transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-            <Hash className="w-4 h-4 text-neutral-600" />
+          <div className={`text-xs sm:text-sm md:text-base font-mono text-neutral-500 mb-2 flex items-center gap-2 transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+            <Hash className="w-3 h-3 sm:w-4 sm:h-4 text-neutral-600" />
             <ScrambleText text="IDENTITY VERIFIED..." delay={500} />
           </div>
           
-          <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold text-white tracking-tighter leading-none relative group cursor-default">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-tighter leading-none relative group cursor-default">
              {/* Name Scramble */}
              <ScrambleText text="DHANVINA" className="block" delay={1200} />
              
@@ -210,17 +210,17 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
 
         {/* Bio & Stats */}
-        <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 mt-12 transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className={`grid grid-cols-1 md:grid-cols-12 gap-8 mt-8 md:mt-12 transition-all duration-1000 delay-700 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           
           {/* Bio Text */}
-          <div className="md:col-span-7 relative pl-6 border-l-2 border-neutral-800">
-             <p className="text-lg md:text-2xl text-neutral-400 font-light leading-relaxed">
+          <div className="md:col-span-7 relative pl-4 md:pl-6 border-l-2 border-neutral-800">
+             <p className="text-base sm:text-lg md:text-2xl text-neutral-400 font-light leading-relaxed">
                 I build <span className="text-white font-medium">AI-powered systems</span> with robust <span className="text-white font-medium">backend architecture</span>, optimized for <span className="text-white font-medium">production</span>.
              </p>
-             <p className="mt-4 text-base text-neutral-500 font-mono leading-relaxed">
+             <p className="mt-4 text-sm md:text-base text-neutral-500 font-mono leading-relaxed">
                 Welcome! I'm Dhanvina, a passionate AI Engineer and Tech Visionary. My mission is to harness the power of technology to create smarter, scalable, and impactful solutions.
              </p>
-             <p className="mt-4 text-sm text-green-500 font-mono">
+             <p className="mt-4 text-xs sm:text-sm text-green-500 font-mono">
                Current Focus: Building Next-Gen AI Agents & Advancing GenAI Systems.
              </p>
           </div>
@@ -228,19 +228,19 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           {/* Quick Stats Box */}
           <div className="md:col-span-5 flex flex-col justify-end">
              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-neutral-900/30 border border-neutral-800 p-4 backdrop-blur-sm hover:border-white/20 transition-colors group">
-                  <div className="flex items-center gap-2 text-neutral-500 mb-2 text-xs font-mono uppercase">
-                    <Cpu className="w-4 h-4 group-hover:text-green-500 transition-colors" />
+                <div className="bg-neutral-900/30 border border-neutral-800 p-3 sm:p-4 backdrop-blur-sm hover:border-white/20 transition-colors group">
+                  <div className="flex items-center gap-2 text-neutral-500 mb-2 text-[10px] sm:text-xs font-mono uppercase">
+                    <Cpu className="w-3 h-3 sm:w-4 sm:h-4 group-hover:text-green-500 transition-colors" />
                     Projects
                   </div>
-                  <div className="text-2xl font-bold text-white">5+ Deployed</div>
+                  <div className="text-lg sm:text-2xl font-bold text-white">5+ Deployed</div>
                 </div>
-                <div className="bg-neutral-900/30 border border-neutral-800 p-4 backdrop-blur-sm hover:border-white/20 transition-colors group">
-                   <div className="flex items-center gap-2 text-neutral-500 mb-2 text-xs font-mono uppercase">
-                    <Eye className="w-4 h-4 group-hover:text-green-500 transition-colors" />
+                <div className="bg-neutral-900/30 border border-neutral-800 p-3 sm:p-4 backdrop-blur-sm hover:border-white/20 transition-colors group">
+                   <div className="flex items-center gap-2 text-neutral-500 mb-2 text-[10px] sm:text-xs font-mono uppercase">
+                    <Eye className="w-3 h-3 sm:w-4 sm:h-4 group-hover:text-green-500 transition-colors" />
                     Experience
                   </div>
-                  <div className="text-2xl font-bold text-white">Lead Engineer</div>
+                  <div className="text-lg sm:text-2xl font-bold text-white">Lead Engineer</div>
                 </div>
              </div>
           </div>
@@ -250,7 +250,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         <div className={`flex flex-col sm:flex-row gap-4 mt-12 transition-all duration-1000 delay-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
           <button 
             onClick={() => onNavigate('projects')}
-            className="group bg-white text-black px-8 py-4 font-bold text-sm tracking-wide hover:bg-neutral-200 transition-all flex items-center justify-center gap-2"
+            className="group bg-white text-black px-8 py-4 font-bold text-sm tracking-wide hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             ACCESS_PROJECTS
             <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -258,7 +258,7 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           
           <button 
             onClick={() => onNavigate('ai_lab')}
-            className="group border border-neutral-700 text-white px-8 py-4 font-bold text-sm tracking-wide hover:border-white hover:bg-white/5 transition-all flex items-center justify-center gap-2 backdrop-blur-md"
+            className="group border border-neutral-700 text-white px-8 py-4 font-bold text-sm tracking-wide hover:border-white hover:bg-white/5 transition-all flex items-center justify-center gap-2 backdrop-blur-md w-full sm:w-auto"
           >
             <Command className="w-4 h-4 text-neutral-500 group-hover:text-white transition-colors" />
             INITIALIZE_CHAT
