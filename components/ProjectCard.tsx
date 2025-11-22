@@ -10,14 +10,14 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const CardContent = () => (
     <>
-      <div className="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-opacity duration-300 z-10">
-        <ExternalLink className="w-5 h-5 text-white transform group-hover:rotate-45 transition-transform duration-300" />
+      <div className="absolute top-0 right-0 p-4 opacity-50 group-hover:opacity-100 transition-all duration-300 z-10">
+        <ExternalLink className="w-5 h-5 text-white transform group-hover:text-green-400 group-hover:rotate-45 transition-transform duration-300 ease-out" />
       </div>
       
-      <div className="p-6 flex-grow flex flex-col">
+      <div className="p-6 flex-grow flex flex-col relative z-0">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <span className={`w-2 h-2 rounded-full ${project.status === 'LIVE' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`} />
+            <span className={`w-2 h-2 rounded-full ${project.status === 'LIVE' ? 'bg-green-500' : 'bg-yellow-500'} shadow-[0_0_8px_currentColor] animate-pulse`} />
             <span className="text-xs text-neutral-500 font-mono tracking-widest group-hover:text-neutral-300 transition-colors">{project.id} // {project.status}</span>
           </div>
           <Github className="w-4 h-4 text-neutral-700 group-hover:text-white transition-colors" />
@@ -35,16 +35,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           {project.metrics.map((metric, idx) => (
             <div key={idx}>
               <div className="text-[10px] text-neutral-600 uppercase tracking-wider group-hover:text-neutral-500">{metric.label}</div>
-              <div className="text-white font-mono text-sm">{metric.value}</div>
+              <div className="text-white font-mono text-sm group-hover:text-green-100 transition-colors">{metric.value}</div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="p-4 border-t border-neutral-900 bg-neutral-950/50 group-hover:bg-neutral-900 transition-colors">
+      <div className="p-4 border-t border-neutral-900 bg-neutral-950/30 group-hover:bg-neutral-900/80 transition-colors duration-300">
         <div className="flex flex-wrap gap-2">
           {project.tech.map((t) => (
-            <span key={t} className="text-[10px] text-neutral-300 bg-neutral-900 px-2 py-1 border border-neutral-800 rounded-sm font-mono group-hover:border-neutral-700 transition-colors">
+            <span key={t} className="text-[10px] text-neutral-400 bg-neutral-900/50 px-2 py-1 border border-neutral-800/50 rounded-sm font-mono group-hover:text-green-400 group-hover:border-green-500/30 transition-all duration-300">
               {t}
             </span>
           ))}
@@ -59,15 +59,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         href={project.link} 
         target="_blank" 
         rel="noopener noreferrer" 
-        className="group relative border border-neutral-800 bg-black hover:border-green-500/50 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] hover:-translate-y-2 transition-all duration-300 flex flex-col h-full block cursor-pointer"
+        className="group relative border border-neutral-800 bg-black/50 backdrop-blur-sm hover:scale-[1.02] hover:border-green-500/50 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-300 ease-out flex flex-col h-full block cursor-pointer overflow-hidden rounded-sm"
       >
+         {/* Subtle background glow element */}
+         <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 via-green-500/0 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <CardContent />
       </a>
     );
   }
 
   return (
-    <div className="group relative border border-neutral-800 bg-black hover:border-neutral-700 hover:-translate-y-2 hover:shadow-lg transition-all duration-300 flex flex-col h-full">
+    <div className="group relative border border-neutral-800 bg-black/50 backdrop-blur-sm hover:scale-[1.01] hover:border-neutral-600 hover:shadow-lg transition-all duration-300 flex flex-col h-full overflow-hidden rounded-sm">
       <CardContent />
     </div>
   );
