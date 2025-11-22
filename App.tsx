@@ -6,6 +6,7 @@ import About from './components/About';
 import SkillChart from './components/SkillChart';
 import ProjectCard from './components/ProjectCard';
 import AIDashboard from './components/AIDashboard';
+import AITrainingStudio from './components/AITrainingStudio';
 import { PROJECTS, EXPERIENCE, TECH_STACK } from './constants';
 
 const App: React.FC = () => {
@@ -41,7 +42,7 @@ const App: React.FC = () => {
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
-                {['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'AI_LAB'].map((item) => (
+                {['HOME', 'ABOUT', 'PROJECTS', 'SKILLS', 'EXPERIENCE', 'AI_STUDIO', 'AI_LAB'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollTo(item.toLowerCase())}
@@ -171,6 +172,11 @@ const App: React.FC = () => {
               ))}
             </div>
           </div>
+        </section>
+        
+        {/* Section: AI Training Studio (NEW) */}
+        <section id="ai_studio" className="py-24 border-b border-neutral-900 bg-neutral-950/30">
+           <AITrainingStudio />
         </section>
 
         {/* Section: AI Lab / Neural Operations Center */}
