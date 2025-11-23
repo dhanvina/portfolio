@@ -1,70 +1,91 @@
 
-import { GoogleGenAI } from "@google/genai";
+// LOCAL SIMULATION SERVICE
+// Replaces external API calls with a local, rule-based response engine.
 
-// Initialize API Client
-const getAiClient = () => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) {
-    console.error("API_KEY is missing from environment variables.");
-    return null;
+import { PROJECTS, EXPERIENCE, TECH_STACK, SOCIAL_LINKS } from '../constants';
+
+const SYSTEM_DELAY_MS = 30; // Speed of typing effect
+
+/**
+ * Generates a response based on keywords in the prompt.
+ */
+const generateLocalResponse = (prompt: string): string => {
+  const p = prompt.toLowerCase();
+
+  // 1. Identity / About
+  if (p.includes('who are you') || p.includes('your name') || p.includes('about')) {
+    return `I am the Neural Interface for Dhanvina's portfolio. 
+    
+Dhanvina is a Chief AI Officer and Lead AI Engineer specializing in Deep Learning, MLOps, and scalable backend architecture. I can provide details on her Projects, Experience, or Tech Stack.`;
   }
-  return new GoogleGenAI({ apiKey });
+
+  // 2. Projects
+  if (p.includes('project') || p.includes('build') || p.includes('work')) {
+    const projectList = PROJECTS.map(proj => `- ${proj.title}: ${proj.description} [${proj.status}]`).join('\n');
+    return `Accessing Project Database...\n\nHere are some key deployed systems:\n${projectList}\n\nWould you like specific details on 'CtrlFake' or 'MinutesAI'?`;
+  }
+
+  // 3. Experience
+  if (p.includes('experience') || p.includes('job') || p.includes('career') || p.includes('company')) {
+    const job = EXPERIENCE[0]; // Current job
+    return `Current Role: ${job.role} at ${job.company} (${job.period}).\n\nKey Achievements:\n${job.description.join('\n')}\n\nType 'full experience' to see the complete log.`;
+  }
+
+  // 4. Skills / Tech
+  if (p.includes('skill') || p.includes('tech') || p.includes('stack') || p.includes('language')) {
+    return `Analyzing Tech Arsenal...\n\n- AI/ML Core: Python, PyTorch, TensorFlow, YOLO.\n- GenAI: LangChain, Ollama, Gemini.\n- Backend: Django, FastAPI, Docker.\n- Cloud: AWS, GCP, Azure.\n\nDhanvina specializes in end-to-end MLOps pipelines.`;
+  }
+
+  // 5. Contact
+  if (p.includes('contact') || p.includes('email') || p.includes('hire') || p.includes('linkedin')) {
+    return `Communication Channels Open:\n\n- LinkedIn: ${SOCIAL_LINKS.linkedin}\n- Email: ${SOCIAL_LINKS.email}\n- GitHub: ${SOCIAL_LINKS.github}\n\nPriority is given to professional inquiries via LinkedIn.`;
+  }
+
+  // 6. Specific Project Queries
+  if (p.includes('ctrlfake')) return "CtrlFake is a Deepfake Detection platform achieving >90% accuracy using PyTorch and Computer Vision techniques.";
+  if (p.includes('minutesai')) return "MinutesAI automates meeting documentation using LangChain and Ollama, offering modular output formats (PDF/JSON).";
+  if (p.includes('ctrlthreats')) return "CtrlThreats utilizes NLP for cybersecurity threat detection, reducing manual review time by 60%.";
+
+  // Default / Fallback
+  return `Command not recognized by local index. 
+  
+Try asking about:
+- "Projects"
+- "Experience"
+- "Tech Stack"
+- "Contact Info"
+- "About Dhanvina"
+
+System is running in Offline Simulation Mode.`;
 };
 
+/**
+ * Simulates a streaming response by breaking text into chunks and emitting them over time.
+ */
 export const streamGeminiResponse = async (
   prompt: string, 
   onChunk: (text: string) => void
 ) => {
-  const ai = getAiClient();
-  if (!ai) {
-    onChunk("Error: API Key not found. System offline.");
-    return;
-  }
+  // Simulate network latency (initial "thinking" time)
+  await new Promise(resolve => setTimeout(resolve, 600));
 
-  try {
-    const modelId = 'gemini-2.5-flash'; 
-    const systemInstruction = `You are an advanced AI assistant integrated into the portfolio of Dhanvina, a Lead AI Engineer.
-    
-    CONTEXT ABOUT DHANVINA:
-    - Role: Lead AI Engineer.
-    - Mission: Harnessing the power of technology to create smarter, scalable, and impactful solutions.
-    - Focus: Building Next-Gen AI Agents, Advancing GenAI Systems, and Scaling MLOps.
-    - Tech Arsenal: 
-      - AI/ML: Python, PyTorch, TensorFlow, YOLO, OpenCV, Scikit-Learn.
-      - GenAI: OpenAI, LangChain, Hugging Face, Ollama, Gemini.
-      - Backend: Django, Flask, FastAPI.
-      - Cloud/DevOps: AWS, Azure, GCP, Docker, MLflow, DVC.
-    - Key Projects: CtrlFake, MinutesAI, CtrlThreats, SmartMark.
-    - Contact: ndhanvina07@gmail.com
-    - LinkedIn: https://www.linkedin.com/in/ndhanvina/ (Prioritize this for professional inquiries)
-    - Fun Fact: "Artificial Intelligence is like a painter with infinite brushes—every stroke creates something new and revolutionary."
-    
-    PERSONA:
-    - Your persona is a sophisticated, "terminal-style" AI interface.
-    - Be helpful, technical, and precise.
-    - Use technical jargon appropriate for an AI engineer (e.g., "inference", "latency", "pipelines", "neural weights").
-    - If asked about contact info, always mention the LinkedIn profile: https://www.linkedin.com/in/ndhanvina/
-    - Keep answers concise.`;
+  const responseText = generateLocalResponse(prompt);
+  
+  // Split into small chunks to simulate token generation
+  const chunkSize = 4; // chars per tick
+  let currentIndex = 0;
 
-    const chat = ai.chats.create({
-      model: modelId,
-      config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.7,
+  return new Promise<void>((resolve) => {
+    const interval = setInterval(() => {
+      if (currentIndex >= responseText.length) {
+        clearInterval(interval);
+        resolve();
+        return;
       }
-    });
 
-    const result = await chat.sendMessageStream({ message: prompt });
-    
-    for await (const chunk of result) {
-      // Safely extract text from the chunk
-      const text = chunk.text;
-      if (text) {
-        onChunk(text);
-      }
-    }
-  } catch (error: any) {
-    console.error("Gemini Stream Error:", error);
-    onChunk(`\n[SYSTEM ERROR]: ${error.message || 'Connection terminated.'}`);
-  }
+      const nextChunk = responseText.slice(currentIndex, currentIndex + chunkSize);
+      onChunk(nextChunk); // Send the actual text chunk, not the accumulated text
+      currentIndex += chunkSize;
+    }, SYSTEM_DELAY_MS);
+  });
 };

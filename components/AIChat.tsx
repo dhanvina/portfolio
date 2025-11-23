@@ -62,7 +62,7 @@ const AIChat: React.FC = () => {
         { role: 'model', text: 'Terminal history cleared.\nSystem Interface v4.0 ready.' }
       ]);
       setInput('');
-      setTimeout(() => inputRef.current?.focus(), 100);
+      setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
       return;
     }
 
@@ -96,8 +96,8 @@ const AIChat: React.FC = () => {
         case 'status':
           responseText = `SYSTEM DIAGNOSTICS:
   -------------------
-  CORE MODEL  : Gemini-2.5-Flash [OPTIMIZED]
-  LATENCY     : 12ms (Nominal)
+  CORE MODEL  : Local_Simulation_Engine_v1.0
+  MODE        : OFFLINE / STATIC
   MEMORY      : 64GB / 128GB Allocated
   ENCRYPTION  : AES-256-GCM [ACTIVE]
   MODULES     : [Vision, NLP, MLOps] ONLINE`;
@@ -131,13 +131,13 @@ const AIChat: React.FC = () => {
           return newMessages;
         });
         setIsLoading(false);
-        setTimeout(() => inputRef.current?.focus(), 100);
+        setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
       }, 500);
       
       return;
     }
 
-    // --- API HANDLING (Gemini) ---
+    // --- LOCAL SERVICE HANDLING (Was Gemini) ---
     try {
       let fullText = '';
       await streamGeminiResponse(cmd, (chunk) => {
@@ -155,12 +155,12 @@ const AIChat: React.FC = () => {
       console.error("Chat Error", error);
       setMessages(prev => {
           const newMessages = [...prev];
-          newMessages[newMessages.length - 1].text = "ERROR: Connection to Neural Core failed. Check API configuration.";
+          newMessages[newMessages.length - 1].text = "ERROR: Local Neural Core failed to process request.";
           return newMessages;
       });
     } finally {
       setIsLoading(false);
-      setTimeout(() => inputRef.current?.focus(), 100);
+      setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 100);
     }
   };
 
@@ -172,7 +172,7 @@ const AIChat: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-black font-mono text-sm relative" onClick={() => inputRef.current?.focus()}>
+    <div className="h-full flex flex-col bg-black font-mono text-sm relative" onClick={() => inputRef.current?.focus({ preventScroll: true })}>
       {/* Messages Area */}
       <div 
         ref={containerRef}
